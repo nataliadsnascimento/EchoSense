@@ -2,6 +2,7 @@ package com.echosense.service;
 
 import com.echosense.dto.EventoSonoroRequestdto;
 import com.echosense.model.EventoSonoro;
+import com.echosense.model.TipoSom;
 import com.echosense.repository.EventoSonoroRepository;
 import com.echosense.repository.TipoSomRepository;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,10 @@ public class EventoSonoroService {
         if (dto.getDataHora() != null) {
             evento.setDataHora(dto.getDataHora());
         }
+
+        String nomeDoSom = dto.getTipoSom();
+        TipoSom tipoEncontrado = tipoSomRepository.findByNomeSom(nomeDoSom).orElseThrow(() -> new RuntimeException("Erro: Tipo de som não cadastrado -" + nomeDoSom));
+        evento.setTipoSom(tipoEncontrado);
 
         return eventoSonoroRepository.save(evento);
     }
