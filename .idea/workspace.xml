@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="832188f0-eebd-4817-9443-61e3c6fcb46e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/ConfiguracaoUsuario.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/EventoSonoro.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/Historico.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/Notificacao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/StatusEvento.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/TipoSom.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/Usuario.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/ConfiguracaoUsuarioRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/EventoSonoroRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/HistoricoRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/NotificacaoRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/TipoSomRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/UsuarioRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/.gitkeep" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;lucas-allb&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:nataliadsnascimento/EchoSense.git&quot;,
+    &quot;accountId&quot;: &quot;121a4b67-7cf1-43a2-93b9-aa2b8a171915&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="3I2m9V49abRYf58CNx2514Liv0u" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.EchosenseApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Echosense [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Echosense [compile].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/lucas/docker-postegres&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/la020/echo_Sense/src/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\la020\echo_Sense\backend\Echosense\Echosense" />
+      <recent name="C:\Users\la020\echo_Sense\backend" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="EchosenseApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="21" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.echosense.EchosenseApplication" />
+      <module name="Echosense" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.echosense.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.EchosenseApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="832188f0-eebd-4817-9443-61e3c6fcb46e" name="Changes" comment="" />
+      <created>1786970887022</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1786970887022</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Main.java</url>
+          <line>11</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
