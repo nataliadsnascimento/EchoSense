@@ -7,6 +7,9 @@ import com.echosense.repository.EventoSonoroRepository;
 import com.echosense.repository.TipoSomRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 public class EventoSonoroService {
 
@@ -25,6 +28,8 @@ public class EventoSonoroService {
 
         if (dto.getDataHora() != null) {
             evento.setDataHora(dto.getDataHora());
+        } else {
+            evento.setDataHora(LocalDateTime.now());
         }
 
         String nomeDoSom = dto.getTipoSom();
@@ -32,5 +37,18 @@ public class EventoSonoroService {
         evento.setTipoSom(tipoEncontrado);
 
         return eventoSonoroRepository.save(evento);
+    }
+
+    public EventoSonoro buscarPorId(Long id) {
+        return eventoSonoroRepository.findById(id) .orElseThrow(() -> new RuntimeException("Evento sonoro não encontrado com ID: " + id));
+    }
+
+    public List<EventoSonoro> listarHistorico() {
+        return eventoSonoroRepository.findAll();
+    }
+
+    public void excluir(Long id) {
+        EventoSonoro evento = buscarPorId(id);
+        eventoSonoroRepository.delete(evento);
     }
 }
