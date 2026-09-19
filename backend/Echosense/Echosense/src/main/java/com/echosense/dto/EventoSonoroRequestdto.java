@@ -19,6 +19,9 @@ public class EventoSonoroRequestdto {
     @NotBlank(message = "O tipo de som não pode estar vazio")
     private String tipoSom;
 
+    @NotNull(message = "O ID do usuário é obrigatório")
+    private Long idUsuario;
+
     public String getTipoSom() {
         return tipoSom;
     }
@@ -41,5 +44,13 @@ public class EventoSonoroRequestdto {
 
     public void setDataHora(LocalDateTime dataHora) {
         this.dataHora = dataHora;
+    }
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }
