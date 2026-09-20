@@ -1,14 +1,26 @@
 package com.echosense.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 public class EventoSonoroRequestdto {
 
-    private String tipoSom;
+    @NotNull(message = "O nível de confiança é obrigatório")
+    @Min(value = 0, message = "O nível mínimo de confiança é 0")
+    @Max(value = 100, message = "O nível máximo de confiança é 100")
     private Double nivelConfianca;
+
     private LocalDateTime dataHora;
 
-    public EventoSonoroRequestdto() {}
+    @NotBlank(message = "O tipo de som não pode estar vazio")
+    private String tipoSom;
+
+    @NotNull(message = "O ID do usuário é obrigatório")
+    private Long idUsuario;
 
     public String getTipoSom() {
         return tipoSom;
@@ -32,5 +44,13 @@ public class EventoSonoroRequestdto {
 
     public void setDataHora(LocalDateTime dataHora) {
         this.dataHora = dataHora;
+    }
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }
