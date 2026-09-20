@@ -5,21 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="832188f0-eebd-4817-9443-61e3c6fcb46e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/ConfiguracaoUsuario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/EventoSonoro.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/Historico.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/Notificacao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/StatusEvento.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/TipoSom.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/Usuario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/ConfiguracaoUsuarioRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/EventoSonoroRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/HistoricoRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/NotificacaoRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/TipoSomRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/UsuarioRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/.gitkeep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/.gitkeep" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/config/SecurityConfigurations.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/config/SecurityFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/controller/AutenticacaoController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/dto/DadosAutenticacao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/dto/DadosTokenJWT.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/service/AutenticacaoService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/service/TokenService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Echosense/Echosense/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/UsuarioRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/UsuarioRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,8 +25,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Record" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -66,12 +63,13 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/lucas/docker-postegres&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/scurity-jwt&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/la020/echo_Sense/src/Main.java&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -88,7 +86,7 @@
       <module name="Echosense" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.echosense.*" />
+          <option name="PATTERN" value="com.echosense.config.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -111,6 +109,17 @@
       <updated>1786970887022</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
