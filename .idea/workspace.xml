@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="832188f0-eebd-4817-9443-61e3c6fcb46e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/dto/DadosCadastroUsuario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/controller/AutenticacaoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/controller/AutenticacaoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/dto/DadosCadastroUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/dto/DadosCadastroUsuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/model/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/UsuarioRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Echosense/Echosense/src/main/java/com/echosense/repository/UsuarioRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

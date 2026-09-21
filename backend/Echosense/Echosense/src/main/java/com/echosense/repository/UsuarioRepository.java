@@ -1,10 +1,11 @@
 package com.echosense.repository;
 import com.echosense.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 
-    Usuario findByEmail(String email);
+    UserDetails findByEmail(String email);
 
     boolean existsByEmail(String email);
 }
