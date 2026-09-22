@@ -1,8 +1,8 @@
 package com.echosense.exception;
 
-public class ResourseNotFoundException extends RuntimeException {
+public class ResourceNotFoundException extends RuntimeException {
 
-    public ResourseNotFoundException(String message) {
+    public ResourceNotFoundException(String message) {
         super(message);
     }
 }
