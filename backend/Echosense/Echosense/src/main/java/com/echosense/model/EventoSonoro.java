@@ -1,9 +1,7 @@
 package com.echosense.model;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class EventoSonoro {
 
     @Id
@@ -19,8 +18,8 @@ public class EventoSonoro {
     private Long Id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id_usuario", nullable = false)
-    private Usuario usuario;
+    @JoinColumn(name = "id_ambiente", nullable = false)
+    private Ambiente ambiente;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_tipo", nullable = false)
@@ -35,6 +34,13 @@ public class EventoSonoro {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
     private StatusEvento status = StatusEvento.NOVO;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 50)
+    private FeedbackEvento feedback = FeedbackEvento.AGUARDANDO;
+
+    @OneToOne(mappedBy = "eventoSonoro", cascade = CascadeType.ALL)
+    private Notificacao notificacao;
 
     @PrePersist
     protected void aoPersistir(){
