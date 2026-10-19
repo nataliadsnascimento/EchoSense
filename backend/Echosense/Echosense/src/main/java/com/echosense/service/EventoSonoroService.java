@@ -3,6 +3,7 @@ package com.echosense.service;
 import com.echosense.dto.EventoSonoroRequestdto;
 import com.echosense.model.Ambiente;
 import com.echosense.model.EventoSonoro;
+import com.echosense.model.FeedbackEvento;
 import com.echosense.model.TipoSom;
 import com.echosense.repository.AmbienteRepository;
 import com.echosense.repository.EventoSonoroRepository;
@@ -67,5 +68,13 @@ public class EventoSonoroService {
     public void excluir(Long id) {
         EventoSonoro evento = buscarPorId(id);
         eventoSonoroRepository.delete(evento);
+    }
+
+    public void atualizarFeedback(Long id, String feedbackStr) {
+        EventoSonoro evento = buscarPorId(id);
+        FeedbackEvento feedback = FeedbackEvento.valueOf(feedbackStr.toUpperCase());
+
+        evento.setFeedback(feedback);
+        eventoSonoroRepository.save(evento);
     }
 }
