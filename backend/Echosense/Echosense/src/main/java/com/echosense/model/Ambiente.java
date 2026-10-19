@@ -33,7 +33,7 @@ public class Ambiente {
 
     @ManyToOne
     @JoinColumn(name = "id_configuracao", nullable = false)
-    private ConfiguracaoUsuario configuracaoUsuario;
+    private ConfiguracaoUsuario configuracao;
 
     @OneToMany(mappedBy = "ambiente", cascade = CascadeType.ALL)
     private List<EventoSonoro> eventos;
