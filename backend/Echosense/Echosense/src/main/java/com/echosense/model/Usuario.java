@@ -85,4 +85,7 @@ public class Usuario implements UserDetails{
     public boolean isEnabled(){
         return true;
     }
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Ambiente> ambientes;
 }
