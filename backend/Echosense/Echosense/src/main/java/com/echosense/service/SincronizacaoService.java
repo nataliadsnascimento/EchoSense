@@ -3,16 +3,16 @@ package com.echosense.service;
 import com.echosense.dto.SincronizacaoItemDto;
 import com.echosense.repository.EventoOfflineRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 
 @Service
+@RequiredArgsConstructor
 public class SincronizacaoService {
 
-    @Autowired
-    private EventoOfflineRepository repository;
+    private final EventoOfflineRepository repository;
 
     @Transactional
     public void processarSincronizacao(List<SincronizacaoItemDto> lote){
