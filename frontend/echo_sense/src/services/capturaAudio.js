@@ -8,7 +8,10 @@ import {
   prepararAudioParaYamnet
 } from "./processamentoAudio.js";
 
-export async function capturarAudioProcessado(duracaoMs = 2000) {
+export async function capturarAudioProcessado(
+  duracaoMs = 2000,
+  manterMicrofoneLigado = false
+) {
   const stream = await iniciarMicrofone();
 
   try {
@@ -59,6 +62,8 @@ export async function capturarAudioProcessado(duracaoMs = 2000) {
       await contexto.close();
     }
   } finally {
-    pararMicrofone();
+    if (!manterMicrofoneLigado) {
+      pararMicrofone();
+    }
   }
 }

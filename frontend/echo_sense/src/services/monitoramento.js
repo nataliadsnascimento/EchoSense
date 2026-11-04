@@ -1,11 +1,15 @@
 
 import { capturarAudioProcessado } from "./capturaAudio.js";
 import { classificarAudio } from "./classificacaoAudio.js";
+import { pararMicrofone } from "./microfone.js";
 
 let monitorando = false;
 let tarefaAtual = null;
 
-export function iniciarMonitoramento(aoDetectar, aoErro = console.error) {
+export function iniciarMonitoramento(
+  aoDetectar,
+  aoErro = console.error
+) {
   if (monitorando || tarefaAtual) {
     return;
   }
@@ -15,7 +19,11 @@ export function iniciarMonitoramento(aoDetectar, aoErro = console.error) {
   tarefaAtual = (async () => {
     try {
       while (monitorando) {
-        const audio = await capturarAudioProcessado(2000);
+
+        const audio = await capturarAudioProcessado(
+          2000,
+          true
+        );
 
         if (!monitorando) break;
 
@@ -29,6 +37,7 @@ export function iniciarMonitoramento(aoDetectar, aoErro = console.error) {
       aoErro(erro);
     } finally {
       monitorando = false;
+      pararMicrofone();
       tarefaAtual = null;
     }
   })();
