@@ -1,35 +1,44 @@
-import './App.css';
-import logoImg from './assets/icon.png'; 
+import React, { useState, useEffect } from 'react';
+import { SplashScreen } from './pages/SplashScreen';
+import { Onboarding1 } from './pages/Onboarding1';
+import { Onboarding2 } from './pages/Onboarding2';
+import { Onboarding3 } from './pages/Onboarding3';
 
-function App() {
-  return (
-    <div className="splash-container">
-      <div className="top-bar"></div>
+export function App() {
+    const [telaAtual, setTelaAtual] = useState('splash');
 
-      <main className="main-content">
-        <div className="logo-container">
-          <img src={logoImg} alt="EchoSense Logo Principal" className="main-logo" />
-        </div>
+    useEffect(() => {
+        if (telaAtual === 'splash') {
+            const timer = setTimeout(() => {
+                setTelaAtual('onboarding1');
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [telaAtual]);
 
-        <h2 className="tagline">Sons que viram alerta</h2>
-        
-        <p className="description">
-          Tecnologia que transforma sons<br />
-          importantes em alertas visuais<br />
-          e luz para sua segurança<br />
-        </p>
-      </main>
+    const pularOnboarding = () => setTelaAtual('login');
 
-      <div className="bottom-indicator">
-        <div className="pagination-dots">
-          <div className="dot active"></div>
-          <div className="dot"></div>
-          <div className="dot"></div>
-        </div>
-        <p className="swipe-text">Deslize para continuar ➔</p>
-      </div>
-    </div>
-  );
+    return (
+        <main className="bg-gray-950 min-h-screen py-4 flex items-center justify-center">
+            <div className="w-full max-w-[412px] h-[800px] bg-[#F8F7FA] shadow-2xl overflow-hidden rounded-[32px] border-4 border-gray-800">
+
+                {telaAtual === 'splash' && <SplashScreen />}
+
+                {telaAtual === 'onboarding1' && (
+                    <Onboarding1 onNext={() => setTelaAtual('onboarding2')} onSkip={pularOnboarding} />
+                )}
+
+                {telaAtual === 'onboarding2' && (
+                    <Onboarding2 onNext={() => setTelaAtual('onboarding3')} onSkip={pularOnboarding} />
+                )}
+
+                {telaAtual === 'onboarding3' && (
+                    <Onboarding3 onNext={() => setTelaAtual('onboarding4')} onSkip={pularOnboarding} />
+                )}
+
+            </div>
+        </main>
+    );
 }
 
 export default App;

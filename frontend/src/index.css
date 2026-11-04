@@ -1,16 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  font-family: 'Inter', sans-serif;
+  color: #51466d;
+  background: #f5f4f9;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --purple: #6650a4;
+  --purple-dark: #4e378e;
+  --violet: #8b5cf6;
+  --background: #f8f7fc;
+  --text: #51466d;
+  --muted: #858095;
+  --border: #ebe6f5;
+}
+
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
-html, body, #root {
-  width: 100%;
+body {
+  margin: 0;
+  min-width: 320px;
   min-height: 100vh;
-  background-color: #ffffff;
 }
 
-body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 3px solid #b9a4ff;
+  outline-offset: 3px;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+img,
+svg {
+  flex-shrink: 0;
 }
