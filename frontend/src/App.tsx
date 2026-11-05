@@ -42,7 +42,7 @@ export function App() {
                 )}
 
                 {telaAtual === 'onboarding4' && (
-                    <Onboarding4 onFinish={irParaLogin} onSkip={irParaLogin} />
+                    <Onboarding4 onFinish={irParaLogin} />
                 )}
 
                 {telaAtual === 'login' && (

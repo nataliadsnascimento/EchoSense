@@ -10,11 +10,11 @@ export function Onboarding1({ onNext, onSkip }: Props) {
             <div className="h-4 bg-[#5D4A88] w-full"></div>
             <div className="flex-1 flex flex-col justify-between p-5">
                 <div className="flex justify-between items-center mt-2">
-                    <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border border-gray-100 p-2">
+                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border border-gray-100 p-2">
                         <img src={logoIcon} alt="Ícone EchoSense" className="w-full h-full object-contain" />
-                    </button>
+                    </div>
                     <div className="bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-100 text-[10px] font-bold text-[#5D4A88]">
-                        1 de 3
+                        1 de 4
                     </div>
                 </div>
                 <div className="bg-white rounded-[32px] p-5 shadow-sm flex flex-col items-center text-center mt-4">
@@ -29,6 +29,7 @@ export function Onboarding1({ onNext, onSkip }: Props) {
                 <div className="flex flex-col items-center mt-auto pt-4">
                     <div className="flex gap-2 mb-4">
                         <span className="w-2 h-2 rounded-full bg-[#5D4A88]"></span>
+                        <span className="w-2 h-2 rounded-full bg-gray-300"></span>
                         <span className="w-2 h-2 rounded-full bg-gray-300"></span>
                         <span className="w-2 h-2 rounded-full bg-gray-300"></span>
                     </div>

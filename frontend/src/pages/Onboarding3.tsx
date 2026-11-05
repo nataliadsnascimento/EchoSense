@@ -13,9 +13,9 @@ export function Onboarding3({ onNext, onSkip }: Props) {
                     <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border border-gray-100 p-2">
                         <img src={logoIcon} alt="Ícone EchoSense" className="w-full h-full object-contain" />
                     </div>
-                    <button className="w-10 h-10 flex items-center justify-center text-[#5D4A88]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
-                    </button>
+                    <div className="bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-100 text-[10px] font-bold text-[#5D4A88]">
+                        3 de 4
+                    </div>
                 </div>
                 <div className="bg-white rounded-[32px] p-5 shadow-sm flex flex-col items-center text-center mt-4">
                     <h2 className="text-[20px] font-bold text-[#5D4A88] mb-2 leading-tight">
@@ -31,6 +31,7 @@ export function Onboarding3({ onNext, onSkip }: Props) {
                         <span className="w-2 h-2 rounded-full bg-gray-300"></span>
                         <span className="w-2 h-2 rounded-full bg-gray-300"></span>
                         <span className="w-2 h-2 rounded-full bg-[#5D4A88]"></span>
+                        <span className="w-2 h-2 rounded-full bg-gray-300"></span>
                     </div>
                     <button onClick={onNext} className="w-full bg-[#5D4A88] hover:bg-[#4A2E7A] transition-colors text-white py-3 rounded-xl font-bold text-sm mb-2 shadow-md">
                         Próximo
