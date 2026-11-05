@@ -53,7 +53,7 @@ export function App() {
                 )}
 
                 {telaAtual === 'cadastro' && (
-                    <Cadastro
+                    <Signup
                         onSignupSuccess={() => setTelaAtual('select-env')}
                         onGoToLogin={() => setTelaAtual('login')}
                     />
@@ -70,7 +70,6 @@ export function App() {
                         onFinish={() => alert('Parabéns! Concluíste o fluxo inicial do EchoSense com sucesso!')}
                     />
                 )}
-
             </div>
         </main>
     );
