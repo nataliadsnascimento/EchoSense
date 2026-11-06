@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { SplashScreen } from './pages/SplashScreen';
-import { Onboarding1 } from './pages/Onboarding1';
-import { Onboarding2 } from './pages/Onboarding2';
-import { Onboarding3 } from './pages/Onboarding3';
-import { Onboarding4 } from './pages/Onboarding4';
-import { Login } from './pages/Login';
-import { Signup } from './pages/Signup';
-import { SelectEnvironment } from './pages/SelectEnvironment';
-import { CustomizeEnvironment } from './pages/CustomizeEnvironment';
+
+// Importações do Desktop
+import { SplashScreenDesktop } from './pages/desktop/SplashScreenDesktop';
+import { OnboardingDesktop } from './pages/desktop/OnboardingDesktop';
+
+// Importações do Mobile
+import { SplashScreen } from './pages/mobile/SplashScreen';
+import { Onboarding1 } from './pages/mobile/Onboarding1';
+import { Onboarding2 } from './pages/mobile/Onboarding2';
+import { Onboarding3 } from './pages/mobile/Onboarding3';
+import { Onboarding4 } from './pages/mobile/Onboarding4';
+import { Login } from './pages/mobile/Login';
+import { Signup } from './pages/mobile/Signup';
+import { SelectEnvironment } from './pages/mobile/SelectEnvironment';
+import { CustomizeEnvironment } from './pages/mobile/CustomizeEnvironment';
 
 export function App() {
     const [telaAtual, setTelaAtual] = useState('splash');
@@ -15,7 +21,9 @@ export function App() {
     useEffect(() => {
         if (telaAtual === 'splash') {
             const timer = setTimeout(() => {
-                setTelaAtual('onboarding1');
+                // Vai para o Onboarding do Desktop.
+                // Se quiseres testar o mobile de novo, muda isto para 'onboarding1'
+                setTelaAtual('onboarding-desktop');
             }, 3000);
             return () => clearTimeout(timer);
         }
@@ -23,11 +31,27 @@ export function App() {
 
     const irParaLogin = () => setTelaAtual('login');
 
+    // ==========================================
+    // RENDERIZAÇÃO DO FLUXO DESKTOP
+    // ==========================================
+    if (telaAtual === 'splash') {
+        // Se no futuro quiseres detetar o ecrã para mostrar o mobile,
+        // podes colocar uma condição baseada na largura da janela (window.innerWidth)
+        return <SplashScreenDesktop />;
+    }
+
+    if (telaAtual === 'onboarding-desktop') {
+        return <OnboardingDesktop onFinish={irParaLogin} />;
+    }
+
+    // ==========================================
+    // RENDERIZAÇÃO DO FLUXO MOBILE
+    // ==========================================
     return (
         <main className="bg-gray-950 min-h-screen py-4 flex items-center justify-center">
             <div className="w-full max-w-[412px] h-[780px] bg-[#F8F7FA] shadow-2xl overflow-hidden rounded-[32px] border-4 border-gray-800 flex flex-col relative">
 
-                {telaAtual === 'splash' && <SplashScreen />}
+                {telaAtual === 'splash-mobile' && <SplashScreen />}
 
                 {telaAtual === 'onboarding1' && (
                     <Onboarding1 onNext={() => setTelaAtual('onboarding2')} onSkip={irParaLogin} />

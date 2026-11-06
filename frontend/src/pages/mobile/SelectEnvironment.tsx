@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logoIcon from '../assets/som.png';
+import logoIcon from '../../assets/som.png';
 
 interface Props {
     onNext: () => void;

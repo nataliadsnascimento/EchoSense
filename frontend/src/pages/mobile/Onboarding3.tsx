@@ -1,6 +1,6 @@
 import React from 'react';
-import onboarding3Img from '../assets/onboarding3.png';
-import logoIcon from '../assets/som.png';
+import onboarding3Img from '../../assets/onboarding3.png';
+import logoIcon from '../../assets/som.png';
 
 interface Props { onNext: () => void; onSkip: () => void; }
 
