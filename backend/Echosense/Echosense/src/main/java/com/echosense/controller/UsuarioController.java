@@ -1,5 +1,6 @@
 package com.echosense.controller;
 
+import com.echosense.dto.DadosUsuarioResponse;
 import com.echosense.model.Usuario;
 import com.echosense.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +17,38 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarUsuario(@PathVariable Long id) {
+    public ResponseEntity<DadosUsuarioResponse> buscarUsuario(
+            @PathVariable Long id) {
+
         Usuario usuario = usuarioService.buscarPorId(id);
-        return ResponseEntity.ok(usuario);
+
+        return ResponseEntity.ok(converterParaDTO(usuario));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioAtualizado) {
-        Usuario usuario = usuarioService.atualizarUsuario(id, usuarioAtualizado);
-        return ResponseEntity.ok(usuario);
+    public ResponseEntity<DadosUsuarioResponse> atualizarUsuario(
+            @PathVariable Long id,
+            @RequestBody Usuario usuarioAtualizado) {
+
+        Usuario usuario =
+                usuarioService.atualizarUsuario(id, usuarioAtualizado);
+
+        return ResponseEntity.ok(converterParaDTO(usuario));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
         usuarioService.deletarUsuario(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private DadosUsuarioResponse converterParaDTO(Usuario usuario) {
+        return new DadosUsuarioResponse(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getSobrenome(),
+                usuario.getEmail(),
+                usuario.getDataCadastro()
+        );
     }
 }
