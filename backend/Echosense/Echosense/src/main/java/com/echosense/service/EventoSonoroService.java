@@ -38,8 +38,12 @@ public class EventoSonoroService {
         }
 
         Ambiente ambiente = ambienteRepository.findById(dto.getIdAmbiente())
-                .orElseThrow(() -> new RuntimeException("Erro: Ambiente não encontrado com ID " + dto.getIdAmbiente()));
+                .orElseThrow(() -> new RuntimeException(
+                        "Erro: Ambiente não encontrado com ID " + dto.getIdAmbiente()
+                ));
+
         evento.setAmbiente(ambiente);
+        evento.setUsuario(ambiente.getUsuario());
 
         String nomeSom = dto.getTipoSom();
         TipoSom tipoEncontrado = tipoSomRepository.findByNomeSom(nomeSom)

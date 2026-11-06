@@ -15,11 +15,15 @@ public class EventoSonoro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_evento")
-    private Long Id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_ambiente", nullable = false)
     private Ambiente ambiente;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_tipo", nullable = false)
@@ -43,8 +47,8 @@ public class EventoSonoro {
     private Notificacao notificacao;
 
     @PrePersist
-    protected void aoPersistir(){
-        if (this.dataHora == null){
+    protected void aoPersistir() {
+        if (this.dataHora == null) {
             this.dataHora = LocalDateTime.now();
         }
     }
