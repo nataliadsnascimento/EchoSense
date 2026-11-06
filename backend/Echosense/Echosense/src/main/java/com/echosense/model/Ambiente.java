@@ -1,6 +1,7 @@
 package com.echosense.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,15 +30,19 @@ public class Ambiente {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
+    @JsonIgnore
     private Usuario usuario;
 
     @ManyToOne
     @JoinColumn(name = "id_configuracao", nullable = false)
+    @JsonIgnore
     private ConfiguracaoUsuario configuracao;
 
     @OneToMany(mappedBy = "ambiente", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<EventoSonoro> eventos;
 
     @OneToMany(mappedBy = "ambiente", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Historico> historicos;
 }
