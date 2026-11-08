@@ -7,7 +7,7 @@ import {
     Dog,
     ChevronLeft
 } from 'lucide-react';
-import { CustomDateFilters } from '../components/CustomDateFilters';
+import { CustomDateFilters } from '../../components/CustomDateFilters.tsx';
 
 interface SoundPreview {
     id: string;

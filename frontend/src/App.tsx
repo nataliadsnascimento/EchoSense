@@ -1,16 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { SplashScreen } from './pages/SplashScreen';
-import { Onboarding1 } from './pages/Onboarding1';
-import { Onboarding2 } from './pages/Onboarding2';
-import { Onboarding3 } from './pages/Onboarding3';
-import { Onboarding4 } from './pages/Onboarding4';
-import { Login } from './pages/Login';
-import { Signup } from './pages/Signup';
-import { SelectEnvironment } from './pages/SelectEnvironment';
-import { CustomizeEnvironment } from './pages/CustomizeEnvironment';
-import {SoundDetector} from "./pages/SoundDetector";
-import {AlertHistory} from "./pages/AlertHistory";
-import {HistoryFilter} from "./pages/HistoryFilter.tsx";
 
 // === Importações do Desktop ===
 import { SplashScreenDesktop } from './pages/desktop/SplashScreenDesktop';
@@ -33,6 +21,9 @@ import { CustomizeEnvironment } from './pages/mobile/CustomizeEnvironment';
 import { Home } from './pages/mobile/Home';
 import { DetectedSounds } from './pages/mobile/DetectedSounds';
 import { AlertScreen } from './pages/mobile/AlertScreen';
+import {SoundDetector} from "./pages/mobile/SoundDetector";
+import {AlertHistory} from "./pages/mobile/AlertHistory";
+import {HistoryFilter} from "./pages/mobile/HistoryFilter";
 
 // === Componentes Globais / Modais ===
 import { Sidebar } from './components/Sidebar';
@@ -88,8 +79,17 @@ export function App() {
     }, [telaAtual, isMobile]);
 
     const handleNavigation = (tab: string) => {
-        if (tab === 'detectar') setTelaAtual('detectar-sons');
-        if (tab === 'historico') setTelaAtual('historico-alertas');
+        if (tab == 'inicio' || tab == 'home') setTelaAtual('home');
+        if (tab === 'detectar' || tab === 'detectar-sons') setTelaAtual('detectar-sons');
+        if (tab === 'historico' || tab === 'historico-alertas') setTelaAtual('historico-alertas');
+        if (tab === 'alertas' || tab === 'detected-sounds') {
+            setAlertaAtivo({
+                soundName: 'Campainha',
+                confidence: '88%',
+                time: '10:22:45',
+                icon: '🔔',
+            });
+        }
     };
 
     const irParaLogin = () => setTelaAtual('login');
@@ -209,7 +209,7 @@ export function App() {
                             onDismiss={() => setAlertaAtivo(null)}
                             onViewDetails={() => {
                                 setAlertaAtivo(null);
-                                setTelaAtual('detected-sounds');
+                                setTelaAtual('historico-alertas');
                             }}
                         />
                     ) : (
@@ -243,22 +243,34 @@ export function App() {
 
                 {telaAtual === 'customize-env' && (
                     <CustomizeEnvironment
-                        onFinish={() => setTelaAtual('detectar-sons')}
+                        onFinish={() => setTelaAtual('home')}
                     />
                 )}
 
                 {telaAtual === 'detectar-sons' && (
                     <SoundDetector
-                        onBack={() => setTelaAtual('customize-env')}
+                        onBack={() => setTelaAtual('home')}
                         onNavigate={handleNavigation}
                     />
                 )}
 
                 {telaAtual === 'historico-alertas' && (
                     <AlertHistory
-                        onBack={() => setTelaAtual('detectar-sons')}
+                        onBack={() => setTelaAtual('home')}
                         onOpenFilter={() => setTelaAtual('filtros-historico')}
                         onNavigate={handleNavigation}
+                        onSelectAlert={(alerta?: any) => {
+                            const nomeSom = alerta?.name || 'Campainha';
+                            setAlertaAtivo({
+                                soundName: nomeSom,
+                                confidence: alerta?.confidence || '98%',
+                                time: alerta?.time || new Date().toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                }),
+                                icon: getSoundIcon(nomeSom),
+                            });
+                        }}
                     />
                 )}
 
@@ -268,21 +280,13 @@ export function App() {
                     />
                 )}
 
-            </div>
-        </main>
-    );
-                            {telaAtual === 'customize-env' && (
-                                <CustomizeEnvironment
-                                    onFinish={() => setTelaAtual('home')}
-                                />
-                            )}
-
                             {/* Tela Principal (Home) */}
                             {telaAtual === 'home' && (
                                 <Home
                                     userName="Natália"
                                     onOpenSidebar={() => setIsSidebarOpen(true)}
                                     onNavigateToDetect={() => setTelaAtual('detected-sounds')}
+                                    onNavigateToHistory={() => setTelaAtual('historico-alertas')}
                                 />
                             )}
 
@@ -307,9 +311,10 @@ export function App() {
                                 isOpen={isSidebarOpen}
                                 onClose={() => setIsSidebarOpen(false)}
                                 onNavigate={(page) => {
-                                    setTelaAtual(page);
+                                    handleNavigation(page);
                                 }}
                                 onOpenLogoutModal={() => {
+                                    setIsSidebarOpen(false);
                                     setIsModalOpen(true);
                                 }}
                                 userName="Natália"

@@ -25,6 +25,7 @@ interface HistoricoAlertasProps {
     onBack?: () => void;
     onOpenFilter?: () => void;
     onNavigate?: (tab: string) => void;
+    onSelectAlert?: (alerta?: any) => void;
 }
 
 const historyGroups: HistoryGroup[] = [

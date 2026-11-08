@@ -4,9 +4,10 @@ interface HomeProps {
     userName?: string;
     onOpenSidebar: () => void;
     onNavigateToDetect: () => void;
+    onNavigateToHistory?: () => void;
 }
 
-export function Home({userName = "Usuário", onOpenSidebar, onNavigateToDetect}: HomeProps){
+export function Home({userName = "Usuário", onOpenSidebar, onNavigateToDetect, onNavigateToHistory}: HomeProps){
     const [environment, setEnvironment] = useState<'casa' | 'trabalho'>('casa');
     const [isMonitoring, setIsMonitoring] = useState(true);
 
@@ -100,7 +101,7 @@ export function Home({userName = "Usuário", onOpenSidebar, onNavigateToDetect}:
         {/* Lista de Alertas Recentes */}
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-xs font-bold text-gray-800">Últimos alertas</h3>
-          <button onClick={onNavigateToDetect} className="text-[10px] font-bold text-[#5D4A88]">Ver todos</button>
+          <button onClick={onNavigateToHistory} className="text-[10px] font-bold text-[#5D4A88]">Ver todos</button>
         </div>
 
         <div className="flex flex-col gap-2">
