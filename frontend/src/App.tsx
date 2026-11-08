@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 
+import { AlertaAutomatico } from './components/AlertaAutomatico';
 import { SplashScreenDesktop } from './pages/desktop/SplashScreenDesktop';
 import { OnboardingDesktop } from './pages/desktop/OnboardingDesktop';
 import { LoginDesktop } from './pages/desktop/LoginDesktop';
@@ -510,7 +511,22 @@ export function App() {
         );
     };
 
-    return isMobile ? renderMobile() : renderDesktop();
+
+return (
+    <>
+        {isMobile ? renderMobile() : renderDesktop()}
+
+        <AlertaAutomatico
+            ativo={ativo}
+            resultados={resultados}
+            mostrarControles={
+                telaAtual === 'home' ||
+                telaAtual === 'detected-sounds'
+            }
+        />
+    </>
+);
+
 }
 
 export default App;
