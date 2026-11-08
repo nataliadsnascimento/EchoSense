@@ -1,3 +1,4 @@
+import React from 'react';
 
 export interface SoundItem {
     id: number | string;
@@ -9,13 +10,20 @@ export interface SoundItem {
 
 interface DetectedSoundsProps {
     onBack: () => void;
-    onSelectAlert: (alerta: SoundItem) => void;
+    onSelectAlert: () => void;
     soundsList?: SoundItem[];
 }
 
 export function DetectedSounds({onBack, onSelectAlert, soundsList = []}: DetectedSoundsProps){
+    const defaultList: SoundItem[] = [
+        {id: 1, name: 'Campainha', confidence: '88%', time: '10:22:45', icon: '🔔'},
+        {id: 2, name: 'Choro de Bebê', confidence: '97%', time: '10:18:02', icon: '👶'},
+        {id: 3, name: 'Alarme', confidence: '88%', time: '09:47:21', icon: '⚠️'},
+        {id: 4, name: 'Porta Batendo', confidence: '93%', time: '09:32:11', icon: '🚪'},
+        {id: 5, name: 'Cachorro Latindo', confidence: '85%', time: '08:58:03', icon: '🐶'},
+        ];
 
-    const displaySounds = soundsList;
+    const displaySounds = soundsList.length > 0 ? soundsList : defaultList;
 
     return (
         <div className="flex-1 bg-[#F8F7FA] flex flex-col font-sans p-4 pb-20">
@@ -31,15 +39,10 @@ export function DetectedSounds({onBack, onSelectAlert, soundsList = []}: Detecte
           </div>
 
           <div className="flex flex-col gap-2.5">
-            {displaySounds.length === 0 && (
-                <p className="text-center text-gray-500 text-sm mt-6">
-                    Nenhum som detectado ainda.
-                </p>
-            )}
             {displaySounds.map((item) => (
                 <div
                   key={item.id}
-                  onClick={() => onSelectAlert(item)}
+                  onClick={onSelectAlert}
                   className="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:bg-purple-50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
