@@ -14,13 +14,15 @@ import { Login } from './pages/mobile/Login';
 import { Signup } from './pages/mobile/Signup';
 import { SelectEnvironment } from './pages/mobile/SelectEnvironment';
 import { CustomizeEnvironment } from './pages/mobile/CustomizeEnvironment';
+import { Home } from './pages/mobile/Home';
+
 import { Sidebar } from './components/Sidebar';
 import { ConfirmModal } from './components/ConfirmModal';
 
 export function App() {
+    // Começa na Splash para executar o fluxo completo
     const [telaAtual, setTelaAtual] = useState('splash');
 
-    // Estados para os Modais/Gavetas
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -46,14 +48,6 @@ export function App() {
     return (
         <main className="bg-gray-950 min-h-screen py-4 flex items-center justify-center relative">
             <div className="w-full max-w-[412px] h-[780px] bg-[#F8F7FA] shadow-2xl overflow-hidden rounded-[32px] border-4 border-gray-800 flex flex-col relative">
-
-                {/* Botão flutuante para abrir o Menu (para fins de teste visual) */}
-                <button
-                    onClick={() => setIsSidebarOpen(true)}
-                    className="absolute top-4 left-4 z-40 bg-[#5D4A88] text-white text-xs px-3 py-1.5 rounded-xl font-semibold shadow-md hover:opacity-90"
-                >
-                    ☰ Menu
-                </button>
 
                 {telaAtual === 'splash-mobile' && <SplashScreen />}
 
@@ -95,7 +89,16 @@ export function App() {
 
                 {telaAtual === 'customize-env' && (
                     <CustomizeEnvironment
-                        onFinish={() => alert('Parabéns! Concluíste o fluxo inicial do EchoSense com sucesso!')}
+                        onFinish={() => setTelaAtual('home')}
+                    />
+                )}
+
+                {/* Tela principal (Home) */}
+                {telaAtual === 'home' && (
+                    <Home
+                        userName="Natália"
+                        onOpenSidebar={() => setIsSidebarOpen(true)}
+                        onNavigateToDetect={() => alert('Indo para a tela de detecção!')}
                     />
                 )}
 
@@ -104,7 +107,7 @@ export function App() {
                     isOpen={isSidebarOpen}
                     onClose={() => setIsSidebarOpen(false)}
                     onNavigate={(page) => {
-                        alert(`Navegando para a tela: ${page}`);
+                        setTelaAtual(page);
                     }}
                     onOpenLogoutModal={() => {
                         setIsModalOpen(true);
@@ -112,14 +115,14 @@ export function App() {
                     userName="Natália"
                 />
 
-                {/* Componente ConfirmModal Renderizado */}
+                {/* Modal de Confirmação de Saída */}
                 <ConfirmModal
                     isOpen={isModalOpen}
                     title="Tem certeza que deseja sair?"
                     confirmLabel="Sair"
                     onConfirm={() => {
-                        alert('Você saiu da conta!');
                         setIsModalOpen(false);
+                        setTelaAtual('login');
                     }}
                     onCancel={() => setIsModalOpen(false)}
                 />
