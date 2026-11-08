@@ -8,6 +8,7 @@ import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { SelectEnvironment } from './pages/SelectEnvironment';
 import { CustomizeEnvironment } from './pages/CustomizeEnvironment';
+import {SoundDetector} from "./pages/SoundDetector.tsx";
 
 export function App() {
     const [telaAtual, setTelaAtual] = useState('splash');
@@ -20,6 +21,10 @@ export function App() {
             return () => clearTimeout(timer);
         }
     }, [telaAtual]);
+
+    const handleNavigation = (tab: string) => {
+        if (tab === 'detectar') setTelaAtual('detectar-sons');
+    };
 
     const irParaLogin = () => setTelaAtual('login');
 
@@ -67,9 +72,18 @@ export function App() {
 
                 {telaAtual === 'customize-env' && (
                     <CustomizeEnvironment
-                        onFinish={() => alert('Parabéns! Concluíste o fluxo inicial do EchoSense com sucesso!')}
+                        onFinish={() => setTelaAtual('detectar-sons')}
                     />
                 )}
+
+                {/* Tela Principal de Sons Detectados */}
+                {telaAtual === 'detectar-sons' && (
+                    <SoundDetector
+                        onBack={() => setTelaAtual('customize-env')}
+                        onNavigate={handleNavigation}
+                    />
+                )}
+
             </div>
         </main>
     );
