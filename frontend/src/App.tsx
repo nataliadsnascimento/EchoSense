@@ -76,7 +76,6 @@ export function App() {
                     />
                 )}
 
-                {/* Tela Principal de Sons Detectados */}
                 {telaAtual === 'detectar-sons' && (
                     <SoundDetector
                         onBack={() => setTelaAtual('customize-env')}
