@@ -1,4 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { SplashScreen } from './pages/SplashScreen';
+import { Onboarding1 } from './pages/Onboarding1';
+import { Onboarding2 } from './pages/Onboarding2';
+import { Onboarding3 } from './pages/Onboarding3';
+import { Onboarding4 } from './pages/Onboarding4';
+import { Login } from './pages/Login';
+import { Signup } from './pages/Signup';
+import { SelectEnvironment } from './pages/SelectEnvironment';
+import { CustomizeEnvironment } from './pages/CustomizeEnvironment';
+import {SoundDetector} from "./pages/SoundDetector";
+import {AlertHistory} from "./pages/AlertHistory";
+import {HistoryFilter} from "./pages/HistoryFilter.tsx";
 
 // === Importações do Desktop ===
 import { SplashScreenDesktop } from './pages/desktop/SplashScreenDesktop';
@@ -74,6 +86,11 @@ export function App() {
             return () => clearTimeout(timer);
         }
     }, [telaAtual, isMobile]);
+
+    const handleNavigation = (tab: string) => {
+        if (tab === 'detectar') setTelaAtual('detectar-sons');
+        if (tab === 'historico') setTelaAtual('historico-alertas');
+    };
 
     const irParaLogin = () => setTelaAtual('login');
 
@@ -224,6 +241,36 @@ export function App() {
                                 />
                             )}
 
+                {telaAtual === 'customize-env' && (
+                    <CustomizeEnvironment
+                        onFinish={() => setTelaAtual('detectar-sons')}
+                    />
+                )}
+
+                {telaAtual === 'detectar-sons' && (
+                    <SoundDetector
+                        onBack={() => setTelaAtual('customize-env')}
+                        onNavigate={handleNavigation}
+                    />
+                )}
+
+                {telaAtual === 'historico-alertas' && (
+                    <AlertHistory
+                        onBack={() => setTelaAtual('detectar-sons')}
+                        onOpenFilter={() => setTelaAtual('filtros-historico')}
+                        onNavigate={handleNavigation}
+                    />
+                )}
+
+                {telaAtual === 'filtros-historico' && (
+                    <HistoryFilter
+                        onBack={() => setTelaAtual('historico-alertas')}
+                    />
+                )}
+
+            </div>
+        </main>
+    );
                             {telaAtual === 'customize-env' && (
                                 <CustomizeEnvironment
                                     onFinish={() => setTelaAtual('home')}
