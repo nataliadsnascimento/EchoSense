@@ -1,6 +1,10 @@
 import React from 'react';
 
-export function SplashScreenDesktop() {
+interface Props {
+    onNext: () => void;
+}
+
+export function SplashScreenDesktop({ onNext }: Props) {
     return (
         <div className="min-h-screen w-full bg-gradient-to-br from-[#4A2E7A] via-[#2A1847] to-[#140C24] flex items-center justify-center p-12 font-sans text-white relative overflow-hidden">
 
@@ -38,7 +42,11 @@ export function SplashScreenDesktop() {
                             </p>
                         </div>
 
-                        <div className="bg-white text-gray-900 rounded-3xl p-5 shadow-xl flex items-center justify-between transform transition-transform hover:-translate-y-1">
+                        {/* 👇 Transformámos a div num button e adicionámos o onClick={onNext} 👇 */}
+                        <button
+                            onClick={onNext}
+                            className="w-full text-left bg-white text-gray-900 rounded-3xl p-5 shadow-xl flex items-center justify-between transform transition-all hover:-translate-y-1 hover:shadow-2xl hover:bg-gray-50 active:scale-[0.98] cursor-pointer"
+                        >
                             <div>
                                 <span className="font-bold text-sm block mb-1">Sons em destaque</span>
                                 <span className="text-xs text-gray-600 block">Campainha, choro de bebê, alarme de incêndio, telefone, etc.</span>
@@ -48,7 +56,7 @@ export function SplashScreenDesktop() {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                 </svg>
                             </div>
-                        </div>
+                        </button>
                     </div>
                 </div>
 
