@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import logoIcon from '../../assets/som.png';
 
 interface Props {

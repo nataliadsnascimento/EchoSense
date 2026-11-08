@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import logoIcon from '../../assets/som.png';
 import { useGoogleLogin } from '@react-oauth/google'; // Importação do Google
 

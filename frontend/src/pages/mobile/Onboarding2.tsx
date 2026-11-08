@@ -1,4 +1,3 @@
-import React from 'react';
 import onboarding2Img from '../../assets/onboarding2.png';
 import logoIcon from '../../assets/som.png';
 
