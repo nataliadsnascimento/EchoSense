@@ -8,8 +8,9 @@ import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { SelectEnvironment } from './pages/SelectEnvironment';
 import { CustomizeEnvironment } from './pages/CustomizeEnvironment';
-import {SoundDetector} from "./pages/SoundDetector.tsx";
-import {AlertHistory} from "./pages/AlertHistory.tsx";
+import {SoundDetector} from "./pages/SoundDetector";
+import {AlertHistory} from "./pages/AlertHistory";
+import {HistoryFilter} from "./pages/HistoryFilter.tsx";
 
 export function App() {
     const [telaAtual, setTelaAtual] = useState('splash');
@@ -88,7 +89,14 @@ export function App() {
                 {telaAtual === 'historico-alertas' && (
                     <AlertHistory
                         onBack={() => setTelaAtual('detectar-sons')}
+                        onOpenFilter={() => setTelaAtual('filtros-historico')}
                         onNavigate={handleNavigation}
+                    />
+                )}
+
+                {telaAtual === 'filtros-historico' && (
+                    <HistoryFilter
+                        onBack={() => setTelaAtual('historico-alertas')}
                     />
                 )}
 
