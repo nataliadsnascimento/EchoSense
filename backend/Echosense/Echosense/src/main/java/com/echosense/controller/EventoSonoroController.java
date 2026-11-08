@@ -43,4 +43,10 @@ public class EventoSonoroController {
         eventoSonoroService.excluir(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}/feedback")
+    public ResponseEntity<String> darFeedback(@PathVariable Long id, @RequestParam String feedback) {
+        eventoSonoroService.atualizarFeedback(id, feedback);
+        return ResponseEntity.ok("Feedback registrado com sucesso!");
+    }
 }

@@ -1,5 +1,7 @@
 package com.echosense.model;
+
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Historico {
 
     @Id
@@ -18,20 +21,25 @@ public class Historico {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_usuario", nullable = false)
-    private Usuario usuario;
+    @JoinColumn(name = "id_ambiente", nullable = false)
+    private Ambiente ambiente;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_evento")
-    private EventoSonoro eventoSonoro;
+    @Column(name = "periodo_inicio", nullable = false)
+    private LocalDateTime periodoInicio;
 
-    @Column(name = "data_hora", nullable = false)
-    private LocalDateTime dataHora;
+    @Column(name = "periodo_fim")
+    private LocalDateTime periodoFim;
+
+    @Column(name = "total_eventos")
+    private Integer totalEventos;
+
+    @Column(name = "tipo_mais_frequente", length = 100)
+    private String tipoMaisFrequente;
 
     @PrePersist
     protected void aoPersistir(){
-        if (this.dataHora == null){
-            this.dataHora = LocalDateTime.now();
+        if (this.periodoInicio == null){
+            this.periodoInicio = LocalDateTime.now();
         }
     }
 }

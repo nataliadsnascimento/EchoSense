@@ -11,6 +11,7 @@ import lombok.experimental.PackagePrivate;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ConfiguracaoUsuario {
 
     @Id

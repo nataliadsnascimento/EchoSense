@@ -1,5 +1,6 @@
 package com.echosense.model;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Notificacao {
 
     @Id
@@ -17,7 +19,7 @@ public class Notificacao {
     @Column(name = "id_notificacao")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_evento", nullable = false, unique = true)
     private EventoSonoro eventoSonoro;
 

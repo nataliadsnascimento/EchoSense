@@ -6,6 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EventoSonoroRepository extends JpaRepository<EventoSonoro, Long>{
-    List<EventoSonoro> findByUsuarioIdOrderByDataHoraDesc(Long usuarioId);
-    Optional<EventoSonoro> findByIdAndUsuarioId(Long id, Long usuarioId);
+    List<EventoSonoro> findByAmbienteIdOrderByDataHoraDesc(Long ambienteId);
+    Optional<EventoSonoro> findByIdAndAmbienteId(Long id, Long ambienteId);
 }

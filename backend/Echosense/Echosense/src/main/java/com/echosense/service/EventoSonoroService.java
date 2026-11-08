@@ -1,16 +1,16 @@
 package com.echosense.service;
 
 import com.echosense.dto.EventoSonoroRequestdto;
+import com.echosense.model.Ambiente;
 import com.echosense.model.EventoSonoro;
+import com.echosense.model.FeedbackEvento;
 import com.echosense.model.TipoSom;
-import com.echosense.model.Usuario;
+import com.echosense.repository.AmbienteRepository;
 import com.echosense.repository.EventoSonoroRepository;
 import com.echosense.repository.TipoSomRepository;
-import com.echosense.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,14 +18,14 @@ public class EventoSonoroService {
 
     private final EventoSonoroRepository eventoSonoroRepository;
     private final TipoSomRepository tipoSomRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final AmbienteRepository ambienteRepository;
 
     public EventoSonoroService(EventoSonoroRepository eventoSonoroRepository,
                                TipoSomRepository tipoSomRepository,
-                               UsuarioRepository usuarioRepository) {
+                               AmbienteRepository ambienteRepository) {
         this.eventoSonoroRepository = eventoSonoroRepository;
         this.tipoSomRepository = tipoSomRepository;
-        this.usuarioRepository = usuarioRepository;
+        this.ambienteRepository = ambienteRepository;
     }
 
     public EventoSonoro registrarEvento(EventoSonoroRequestdto dto) {
@@ -35,13 +35,11 @@ public class EventoSonoroService {
 
         if (dto.getDataHora() != null) {
             evento.setDataHora(dto.getDataHora());
-        } else {
-            evento.setDataHora(LocalDateTime.now());
         }
 
-        Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
-                .orElseThrow(() -> new RuntimeException("Erro: Usuário não encontrado com ID " + dto.getIdUsuario()));
-        evento.setUsuario(usuario);
+        Ambiente ambiente = ambienteRepository.findById(dto.getIdAmbiente())
+                .orElseThrow(() -> new RuntimeException("Erro: Ambiente não encontrado com ID " + dto.getIdAmbiente()));
+        evento.setAmbiente(ambiente);
 
         String nomeSom = dto.getTipoSom();
         TipoSom tipoEncontrado = tipoSomRepository.findByNomeSom(nomeSom)
@@ -70,5 +68,13 @@ public class EventoSonoroService {
     public void excluir(Long id) {
         EventoSonoro evento = buscarPorId(id);
         eventoSonoroRepository.delete(evento);
+    }
+
+    public void atualizarFeedback(Long id, String feedbackStr) {
+        EventoSonoro evento = buscarPorId(id);
+        FeedbackEvento feedback = FeedbackEvento.valueOf(feedbackStr.toUpperCase());
+
+        evento.setFeedback(feedback);
+        eventoSonoroRepository.save(evento);
     }
 }
