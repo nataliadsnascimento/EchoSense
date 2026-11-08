@@ -18,6 +18,12 @@ import { Login } from './pages/mobile/Login';
 import { Signup } from './pages/mobile/Signup';
 import { SelectEnvironment } from './pages/mobile/SelectEnvironment';
 import { CustomizeEnvironment } from './pages/mobile/CustomizeEnvironment';
+import { Home } from './pages/mobile/Home';
+import { DetectedSounds } from './pages/mobile/DetectedSounds';
+
+// === Componentes Globais / Modais ===
+import { Sidebar } from './components/Sidebar';
+import { ConfirmModal } from './components/ConfirmModal';
 
 export function App() {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -29,6 +35,10 @@ export function App() {
     }, []);
 
     const [telaAtual, setTelaAtual] = useState('splash');
+
+    // Estados para o Menu Lateral e Modais no Mobile
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Estados para guardar a escolha do ambiente no desktop
     const [ambienteEscolhido, setAmbienteEscolhido] = useState('trabalho');
@@ -69,9 +79,27 @@ export function App() {
                 <CustomizeEnvironmentDesktop
                     ambienteEscolhido={ambienteEscolhido}
                     nomePersonalizado={nomeOutro}
-                    onFinish={() => alert('Parabéns! Concluíste o fluxo completo do EchoSense no Desktop com sucesso!')}
+                    onFinish={() => setTelaAtual('home')}
                 />
             );
+        }
+
+        if (telaAtual === 'home') {
+            return (
+                <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-900 text-white">
+                    <h1 className="text-2xl font-bold mb-4">Home (Desktop)</h1>
+                    <button
+                        onClick={() => setTelaAtual('detected-sounds')}
+                        className="px-4 py-2 bg-purple-600 rounded-lg font-semibold hover:bg-purple-700 transition"
+                    >
+                        Ver Sons Detectados
+                    </button>
+                </div>
+            );
+        }
+
+        if (telaAtual === 'detected-sounds') {
+            return <DetectedSounds onBack={() => setTelaAtual('home')} onSelectAlert={() => alert('Alerta selecionado!')} />;
         }
 
         return null;
@@ -112,9 +140,51 @@ export function App() {
 
                     {telaAtual === 'customize-env' && (
                         <CustomizeEnvironment
-                            onFinish={() => alert('Parabéns! Concluíste o fluxo inicial do EchoSense com sucesso!')}
+                            onFinish={() => setTelaAtual('home')}
                         />
                     )}
+
+                    {/* Tela Principal (Home) */}
+                    {telaAtual === 'home' && (
+                        <Home
+                            userName="Natália"
+                            onOpenSidebar={() => setIsSidebarOpen(true)}
+                            onNavigateToDetect={() => setTelaAtual('detected-sounds')}
+                        />
+                    )}
+
+                    {/* Tela de Sons Detectados */}
+                    {telaAtual === 'detected-sounds' && (
+                        <DetectedSounds
+                            onBack={() => setTelaAtual('home')}
+                            onSelectAlert={() => alert('Clicou em um alerta específico!')}
+                        />
+                    )}
+
+                    {/* Menu Lateral (Sidebar) */}
+                    <Sidebar
+                        isOpen={isSidebarOpen}
+                        onClose={() => setIsSidebarOpen(false)}
+                        onNavigate={(page) => {
+                            setTelaAtual(page);
+                        }}
+                        onOpenLogoutModal={() => {
+                            setIsModalOpen(true);
+                        }}
+                        userName="Natália"
+                    />
+
+                    {/* Modal de Confirmação de Saída */}
+                    <ConfirmModal
+                        isOpen={isModalOpen}
+                        title="Tem certeza que deseja sair?"
+                        confirmLabel="Sair"
+                        onConfirm={() => {
+                            setIsModalOpen(false);
+                            setTelaAtual('login');
+                        }}
+                        onCancel={() => setIsModalOpen(false)}
+                    />
                 </div>
             </main>
         );
