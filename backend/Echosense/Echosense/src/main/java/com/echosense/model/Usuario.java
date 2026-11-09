@@ -1,4 +1,5 @@
 package com.echosense.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -88,4 +89,8 @@ public class Usuario implements UserDetails{
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Ambiente> ambientes;
+
+    @OneToOne(mappedBy = "usuario")
+    @JsonIgnore
+    private ConfiguracaoUsuario configuracao;
 }

@@ -5,6 +5,8 @@ import com.echosense.model.Usuario;
 import com.echosense.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -37,10 +39,24 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarUsuario(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        Usuario usuarioAutenticado =
+                (Usuario) authentication.getPrincipal();
+
+        if (!usuarioAutenticado.getId().equals(id)) {
+            return ResponseEntity.status(
+                    HttpStatus.FORBIDDEN
+            ).build();
+        }
+
         usuarioService.deletarUsuario(id);
+
         return ResponseEntity.noContent().build();
     }
+
 
     private DadosUsuarioResponse converterParaDTO(Usuario usuario) {
         return new DadosUsuarioResponse(
