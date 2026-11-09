@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import logoIcon from '../../assets/som.png';
 
-
 interface Props {
-    onNext: (ambiente: string, outroTexto?: string) => void;
+    OnNext: (ambiente: string, outroTexto?: string) => void;
 }
 
 export function SelectEnvironmentDesktop({ onNext }: Props) {

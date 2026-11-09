@@ -1,3 +1,4 @@
+import React from 'react';
 import logoIcon from '../../assets/som.png';
 import logoGrande from '../../assets/icon.png';
 
