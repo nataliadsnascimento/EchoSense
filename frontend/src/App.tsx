@@ -24,6 +24,7 @@ import { AlertScreen } from './pages/mobile/AlertScreen';
 import {SoundDetector} from "./pages/mobile/SoundDetector";
 import {AlertHistory} from "./pages/mobile/AlertHistory";
 import {HistoryFilter} from "./pages/mobile/HistoryFilter";
+import {AlertDetails} from "./components/AlertDetails.tsx";
 
 // === Componentes Globais / Modais ===
 import { Sidebar } from './components/Sidebar';
@@ -92,6 +93,12 @@ export function App() {
         }
     };
 
+    const [detalhesAlertaSelecionado, setDetalhesAlertaSelecionado] = useState<{
+        title: string;
+        confidence: string;
+        dateOrTime: string;
+    } | null>(null);
+
     const irParaLogin = () => setTelaAtual('login');
 
     // === RENDERIZAÇÃO DO FLUXO DESKTOP ===
@@ -107,6 +114,11 @@ export function App() {
                             icon={alertaAtivo.icon}
                             onDismiss={() => setAlertaAtivo(null)}
                             onViewDetails={() => {
+                                setDetalhesAlertaSelecionado({
+                                    title: alertaAtivo.soundName,
+                                    confidence: alertaAtivo.confidence,
+                                    dateOrTime: alertaAtivo.time,
+                                });
                                 setAlertaAtivo(null);
                                 setTelaAtual('detected-sounds');
                             }}
@@ -208,8 +220,13 @@ export function App() {
                             icon={alertaAtivo.icon}
                             onDismiss={() => setAlertaAtivo(null)}
                             onViewDetails={() => {
+                                setDetalhesAlertaSelecionado({
+                                    title: alertaAtivo.soundName,
+                                    confidence: alertaAtivo.confidence,
+                                    dateOrTime: alertaAtivo.time,
+                                });
                                 setAlertaAtivo(null);
-                                setTelaAtual('historico-alertas');
+                                setTelaAtual('detalhes-alerta');
                             }}
                         />
                     ) : (
@@ -241,6 +258,23 @@ export function App() {
                                 />
                             )}
 
+                            {/* Rota para os Detalhes do Alerta */}
+                            {telaAtual === 'detalhes-alerta' && (
+                                <AlertDetails
+                                    onBack={() => setTelaAtual('historico-alertas')}
+                                    onNavigate={handleNavigation}
+                                    onDeleteEvent={() => {
+
+                                        setTelaAtual('historico-alertas');
+                                    }}
+                                    mainAlert={detalhesAlertaSelecionado || {
+                                        title: 'Campainha',
+                                        confidence: '98%',
+                                        dateOrTime: '27/12/2026 10:23:45',
+                                    }}
+                                />
+                            )}
+
                 {telaAtual === 'customize-env' && (
                     <CustomizeEnvironment
                         onFinish={() => setTelaAtual('home')}
@@ -260,16 +294,16 @@ export function App() {
                         onOpenFilter={() => setTelaAtual('filtros-historico')}
                         onNavigate={handleNavigation}
                         onSelectAlert={(alerta?: any) => {
-                            const nomeSom = alerta?.name || 'Campainha';
-                            setAlertaAtivo({
-                                soundName: nomeSom,
-                                confidence: alerta?.confidence || '98%',
-                                time: alerta?.time || new Date().toLocaleTimeString([], {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                }),
-                                icon: getSoundIcon(nomeSom),
-                            });
+                                const nomeSom = alerta?.name || alerta?.title || 'Campainha';
+                                const conf = alerta?.confidence || '98%';
+                                const hora = alerta?.time || alerta?.dateOrTime || '10:23:45';
+
+                                setDetalhesAlertaSelecionado({
+                                    title: nomeSom,
+                                    confidence: conf,
+                                    dateOrTime: hora,
+                                });
+                                setTelaAtual('detalhes-alerta');
                         }}
                     />
                 )}
