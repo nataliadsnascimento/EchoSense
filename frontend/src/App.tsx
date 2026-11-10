@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 // === Importações do Desktop ===
-import { useState, useEffect, useMemo } from 'react';
 
 import { AlertaAutomatico } from './components/AlertaAutomatico';
 import { SplashScreenDesktop } from './pages/desktop/SplashScreenDesktop';
@@ -46,6 +45,16 @@ function getSoundIcon(soundName: string) {
     return '🔊'; // Ícone padrão
 }
 
+export interface SoundEvent {
+    id: string;
+    name: string;
+    confidence: number | string;
+    time: string;
+    date?: string;
+    environment?: string;
+    isAlarm?: boolean;
+}
+
 export function App() {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -56,6 +65,8 @@ export function App() {
     }, []);
 
     const [telaAtual, setTelaAtual] = useState('splash');
+    const [resultados, setResultados] = useState<SoundEvent[]>([]);
+    const [ativo, setAtivo] = useState(true);
 
     // Estado para disparar o Alerta em Tempo Real
     const [alertaAtivo, setAlertaAtivo] = useState<{
@@ -288,6 +299,7 @@ export function App() {
                     <SoundDetector
                         onBack={() => setTelaAtual('home')}
                         onNavigate={handleNavigation}
+                        soundsList={resultados}
                     />
                 )}
 
@@ -296,6 +308,7 @@ export function App() {
                         onBack={() => setTelaAtual('home')}
                         onOpenFilter={() => setTelaAtual('filtros-historico')}
                         onNavigate={handleNavigation}
+                        soundsList={resultados}
                         onSelectAlert={(alerta?: any) => {
                                 const nomeSom = alerta?.name || alerta?.title || 'Campainha';
                                 const conf = alerta?.confidence || '98%';
@@ -385,8 +398,22 @@ return (
             resultados={resultados}
             mostrarControles={
                 telaAtual === 'home' ||
-                telaAtual === 'detected-sounds'
+                telaAtual === 'detected-sounds' ||
+                telaAtual === 'detectar-sons'
             }
+
+            onDetection={(novoSom: SoundEvent) => {
+                setResultados((prev) => [novoSom, ...prev]);
+
+                if (Number(novoSom.confidence) >= 85) {
+                    setAlertaAtivo({
+                        soundName: novoSom.name,
+                        confidence: `${novoSom.confidence}%`,
+                        time: novoSom.time || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                        icon: getSoundIcon(novoSom.name),
+                    });
+                }
+            }}
         />
     </>
 );

@@ -13,6 +13,7 @@ interface Props {
     ativo: boolean;
     resultados: ResultadoSom[];
     mostrarControles?: boolean;
+    onDetection?: (novoSom: any) => void;
 }
 
 const CONFIANCA_MINIMA = 0.50;
@@ -20,7 +21,8 @@ const INTERVALO_ALERTAS = 12000;
 
 export function AlertaAutomatico({
     ativo,
-    resultados
+    resultados,
+    onDetection
 }: Props) {
 
     const ultimoAlerta = useRef(0);
