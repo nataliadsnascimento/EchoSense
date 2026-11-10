@@ -1,6 +1,7 @@
+
 package com.echosense.service;
 
-import com.echosense.dto.EventoSonoroRequestdto;
+import com.echosense.dto.EventoSonoroRequestDto;
 import com.echosense.model.Ambiente;
 import com.echosense.model.EventoSonoro;
 import com.echosense.model.FeedbackEvento;
@@ -8,6 +9,7 @@ import com.echosense.model.TipoSom;
 import com.echosense.repository.AmbienteRepository;
 import com.echosense.repository.EventoSonoroRepository;
 import com.echosense.repository.TipoSomRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,65 +22,88 @@ public class EventoSonoroService {
     private final TipoSomRepository tipoSomRepository;
     private final AmbienteRepository ambienteRepository;
 
-    public EventoSonoroService(EventoSonoroRepository eventoSonoroRepository,
-                               TipoSomRepository tipoSomRepository,
-                               AmbienteRepository ambienteRepository) {
+    public EventoSonoroService(
+            EventoSonoroRepository eventoSonoroRepository,
+            TipoSomRepository tipoSomRepository,
+            AmbienteRepository ambienteRepository) {
+
         this.eventoSonoroRepository = eventoSonoroRepository;
         this.tipoSomRepository = tipoSomRepository;
         this.ambienteRepository = ambienteRepository;
     }
 
-    public EventoSonoro registrarEvento(EventoSonoroRequestdto dto) {
+    @Transactional
+    public EventoSonoro registrarEvento(EventoSonoroRequestDto dto) {
+
         EventoSonoro evento = new EventoSonoro();
 
-        evento.setConfianca(dto.getNivelConfianca());
+        evento.setConfianca(dto.nivelConfianca());
 
-        if (dto.getDataHora() != null) {
-            evento.setDataHora(dto.getDataHora());
+        if (dto.dataHora() != null) {
+            evento.setDataHora(dto.dataHora());
         }
 
-        Ambiente ambiente = ambienteRepository.findById(dto.getIdAmbiente())
+        Ambiente ambiente = ambienteRepository
+                .findById(dto.idAmbiente())
                 .orElseThrow(() -> new RuntimeException(
-                        "Erro: Ambiente não encontrado com ID " + dto.getIdAmbiente()
+                        "Erro: Ambiente não encontrado com ID "
+                                + dto.idAmbiente()
                 ));
 
         evento.setAmbiente(ambiente);
+
         evento.setUsuario(ambiente.getUsuario());
 
-        String nomeSom = dto.getTipoSom();
-        TipoSom tipoEncontrado = tipoSomRepository.findByNomeSom(nomeSom)
+        String nomeSom = dto.tipoSom();
+
+        TipoSom tipo = tipoSomRepository.findByNomeSom(nomeSom)
                 .orElseGet(() -> {
-                    TipoSom novoTipo = new TipoSom();
-                    novoTipo.setNomeSom(nomeSom);
-                    novoTipo.setCategoria("Geral");
-                    return tipoSomRepository.save(novoTipo);
+                    TipoSom novo = new TipoSom();
+                    novo.setNomeSom(nomeSom);
+                    novo.setCategoria("Geral");
+
+                    return tipoSomRepository.save(novo);
                 });
 
-        evento.setTipoSom(tipoEncontrado);
+        evento.setTipoSom(tipo);
 
         return eventoSonoroRepository.save(evento);
     }
 
+    @Transactional(readOnly = true)
     public EventoSonoro buscarPorId(Long id) {
+
         return eventoSonoroRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Evento sonoro não encontrado com ID: " + id));
+                .orElseThrow(() -> new RuntimeException(
+                        "Evento sonoro não encontrado com ID: " + id
+                ));
     }
 
     @Transactional(readOnly = true)
     public List<EventoSonoro> listarHistorico() {
+
         return eventoSonoroRepository.findAll();
     }
 
+    @Transactional
     public void excluir(Long id) {
+
         EventoSonoro evento = buscarPorId(id);
+
         eventoSonoroRepository.delete(evento);
     }
 
+    @Transactional
     public void atualizarFeedback(Long id, String feedbackStr) {
+
         EventoSonoro evento = buscarPorId(id);
-        FeedbackEvento feedback = FeedbackEvento.valueOf(feedbackStr.toUpperCase());
+
+        FeedbackEvento feedback = FeedbackEvento.valueOf(
+                feedbackStr.toUpperCase()
+        );
 
         evento.setFeedback(feedback);
+
         eventoSonoroRepository.save(evento);
     }
 }
