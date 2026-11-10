@@ -26,6 +26,7 @@ interface HistoricoAlertasProps {
     onOpenFilter?: () => void;
     onNavigate?: (tab: string) => void;
     onSelectAlert?: (alerta?: any) => void;
+    soundsList?:any[];
 }
 
 const historyGroups: HistoryGroup[] = [
@@ -33,7 +34,7 @@ const historyGroups: HistoryGroup[] = [
     { id: '2', title: 'Choro de bebê', detections: 1, time: '09:56', confidence: 93, icon: <Baby size={20} /> }
 ];
 
-export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFilter, onNavigate }) => {
+export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFilter, onNavigate, soundsList = [] }) => {
     const [feedbacks, setFeedbacks] = useState<{ [key: string]: string }>({});
 
     const handleFeedbackChange = (id: string, text: string) => {
@@ -47,6 +48,8 @@ export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFi
             setFeedbacks(prev => ({ ...prev, [id]: '' }));
         }
     };
+
+    const listToRender = soundsList && soundsList.length > 0 ? soundsList : historyGroups;
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#F8F7FA', paddingBottom: 0 }}>
@@ -112,9 +115,9 @@ export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFi
             </div>
 
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto', paddingBottom: 10 }}>
-                {historyGroups.map((group) => (
+                {listToRender.map((group) => (
                     <div
-                        key={group.id}
+                        key={group.id || Math.random()}
                         style={{
                             background: 'white',
                             borderRadius: 16,
@@ -145,11 +148,11 @@ export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFi
                                     color: 'var(--purple, #5c3c92)'
                                 }}
                             >
-                                {group.icon}
+                                {typeof group.icon === 'string' ? group.icon : (group.icon || '🔊')}
                             </div>
                             <div>
                                 <h3 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: '#2D2342' }}>{group.title}</h3>
-                                <span style={{ fontSize: 11, color: '#7E7694' }}>{group.detections} detecção</span>
+                                <span style={{ fontSize: 11, color: '#7E7694' }}>{group.detections ? `${group.detections} detecção` : 'Detecção em tempo real'}</span>
                             </div>
                         </div>
 
