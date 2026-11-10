@@ -77,7 +77,7 @@ export function AlertDetails({
             {mainAlert.dateOrTime}
           </span>
                 </div>
-            }
+
                 <div className="bg-white rounded-[24px] shadow-sm border border-purple-50 overflow-hidden mb-4 divide-y divide-gray-100">
                     {relatedAlerts.map((item) => (
                         <div key={item.id || item.title} className="p-3.5 flex items-center justify-between">
