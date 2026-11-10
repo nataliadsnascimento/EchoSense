@@ -29,8 +29,8 @@ interface HistoricoAlertasProps {
 }
 
 const historyGroups: HistoryGroup[] = [
-    { id: '1', title: 'Campainha', detections: 1, time: '10:15', confidence: 97, icon: <Bell size={18} /> },
-    { id: '2', title: 'Choro de bebê', detections: 1, time: '09:56', confidence: 93, icon: <Baby size={18} /> }
+    { id: '1', title: 'Campainha', detections: 1, time: '10:15', confidence: 97, icon: <Bell size={20} /> },
+    { id: '2', title: 'Choro de bebê', detections: 1, time: '09:56', confidence: 93, icon: <Baby size={20} /> }
 ];
 
 export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFilter, onNavigate }) => {
@@ -257,11 +257,11 @@ export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFi
                 gridTemplateColumns: 'repeat(5, 1fr)',
                 alignItems: 'center',
                 justifyItems: 'center',
-                height: 68,
+                height: 72,
                 borderTop: '1px solid #EFEAF8',
-                margin: '4px -22px 0px',
+
                 background: 'white',
-                paddingTop: 6,
+                paddingTop: 8,
                 paddingBottom: 12
             }}>
                 <button className="skip-button" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: 0, width: '100%', background: 'none', border: 'none', cursor: 'pointer' }} onClick={() => onNavigate?.('inicio')}>
