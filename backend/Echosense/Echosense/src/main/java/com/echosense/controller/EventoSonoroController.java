@@ -1,6 +1,7 @@
 package com.echosense.controller;
 
 import com.echosense.dto.EventoSonoroRequestdto;
+import com.echosense.dto.EventoSonoroResponseDto;
 import com.echosense.model.EventoSonoro;
 import com.echosense.service.EventoSonoroService;
 import org.springframework.http.HttpStatus;
@@ -21,21 +22,26 @@ public class EventoSonoroController {
     }
 
     @PostMapping
-    public ResponseEntity<EventoSonoro> registrarEvento(@RequestBody @Valid EventoSonoroRequestdto dto) {
+    public ResponseEntity<EventoSonoroResponseDto> registrarEvento(@RequestBody @Valid EventoSonoroRequestdto dto) {
         EventoSonoro eventoSalvo = eventoSonoroService.registrarEvento(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(eventoSalvo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new EventoSonoroResponseDto(eventoSalvo));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventoSonoro> buscarporId(@PathVariable Long id){
+    public ResponseEntity<EventoSonoroResponseDto> buscarporId(@PathVariable Long id){
         EventoSonoro evento = eventoSonoroService.buscarPorId(id);
-        return ResponseEntity.ok(evento);
+        return ResponseEntity.ok(new EventoSonoroResponseDto(evento));
     }
 
     @GetMapping
-    public ResponseEntity<List<EventoSonoro>> listarHistorico(){
+    public ResponseEntity<List<EventoSonoroResponseDto>> listarHistorico(){
         List<EventoSonoro> historico = eventoSonoroService.listarHistorico();
-        return ResponseEntity.ok(historico);
+
+        List<EventoSonoroResponseDto> historicoDto = historico.stream()
+                .map(EventoSonoroResponseDto::new)
+                .toList();
+
+        return ResponseEntity.ok(historicoDto);
     }
 
     @DeleteMapping("/{id}")
@@ -44,7 +50,7 @@ public class EventoSonoroController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}/feedback")
+    @PutMapping("/{id}/feedback")
     public ResponseEntity<String> darFeedback(@PathVariable Long id, @RequestParam String feedback) {
         eventoSonoroService.atualizarFeedback(id, feedback);
         return ResponseEntity.ok("Feedback registrado com sucesso!");
