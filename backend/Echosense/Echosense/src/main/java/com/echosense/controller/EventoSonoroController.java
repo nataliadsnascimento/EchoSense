@@ -1,13 +1,14 @@
 package com.echosense.controller;
 
-import com.echosense.dto.EventoSonoroRequestdto;
+import com.echosense.dto.EventoSonoroRequestDto;
 import com.echosense.dto.EventoSonoroResponseDto;
 import com.echosense.model.EventoSonoro;
 import com.echosense.service.EventoSonoroService;
+
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -22,19 +23,27 @@ public class EventoSonoroController {
     }
 
     @PostMapping
-    public ResponseEntity<EventoSonoroResponseDto> registrarEvento(@RequestBody @Valid EventoSonoroRequestdto dto) {
+    public ResponseEntity<EventoSonoroResponseDto> registrarEvento(
+            @RequestBody @Valid EventoSonoroRequestDto dto) {
+
         EventoSonoro eventoSalvo = eventoSonoroService.registrarEvento(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new EventoSonoroResponseDto(eventoSalvo));
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new EventoSonoroResponseDto(eventoSalvo));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventoSonoroResponseDto> buscarporId(@PathVariable Long id){
+    public ResponseEntity<EventoSonoroResponseDto> buscarporId(
+            @PathVariable Long id) {
+
         EventoSonoro evento = eventoSonoroService.buscarPorId(id);
+
         return ResponseEntity.ok(new EventoSonoroResponseDto(evento));
     }
 
     @GetMapping
-    public ResponseEntity<List<EventoSonoroResponseDto>> listarHistorico(){
+    public ResponseEntity<List<EventoSonoroResponseDto>> listarHistorico() {
+
         List<EventoSonoro> historico = eventoSonoroService.listarHistorico();
 
         List<EventoSonoroResponseDto> historicoDto = historico.stream()
@@ -45,14 +54,20 @@ public class EventoSonoroController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluirEvento(@PathVariable Long id){
+    public ResponseEntity<Void> excluirEvento(@PathVariable Long id) {
+
         eventoSonoroService.excluir(id);
+
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/feedback")
-    public ResponseEntity<String> darFeedback(@PathVariable Long id, @RequestParam String feedback) {
+    public ResponseEntity<String> darFeedback(
+            @PathVariable Long id,
+            @RequestParam String feedback) {
+
         eventoSonoroService.atualizarFeedback(id, feedback);
+
         return ResponseEntity.ok("Feedback registrado com sucesso!");
     }
 }
