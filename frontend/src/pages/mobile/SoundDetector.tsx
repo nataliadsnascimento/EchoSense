@@ -13,6 +13,7 @@ interface SoundItem {
 interface DetectarSonsProps {
     onBack?: () => void;
     onNavigate?: (tab: string) => void;
+    soundsList?:any[];
 }
 
 const detectedSounds: SoundItem[] = [
@@ -23,7 +24,9 @@ const detectedSounds: SoundItem[] = [
     { id: '5', title: 'Cachorro latindo', confidence: 93, time: '09:56:03', icon: <Dog size={24} /> }
 ];
 
-export const SoundDetector: React.FC<DetectarSonsProps> = ({ onBack, onNavigate }) => {
+export const SoundDetector: React.FC<DetectarSonsProps> = ({ onBack, onNavigate, soundsList = []}) => {
+    const listToRender = soundsList && soundsList.length > 0 ? soundsList : detectedSounds;
+
     return (
         <div className="onboarding-screen" style={{ display: 'flex', flexDirection: 'column', height: '100%', paddingBottom: 0 }}>
             <div
@@ -65,7 +68,7 @@ export const SoundDetector: React.FC<DetectarSonsProps> = ({ onBack, onNavigate 
                         boxShadow: '0 4px 14px rgba(76, 52, 138, 0.08)'
                     }}
                 >
-                    {detectedSounds.map((item, index) => (
+                    {listToRender.map((item, index) => (
                         <div
                             key={item.id}
                             className="event-card"
@@ -93,11 +96,12 @@ export const SoundDetector: React.FC<DetectarSonsProps> = ({ onBack, onNavigate 
                                     padding: 0
                                 }}
                             >
-                                {item.icon}
+                                {typeof item.icon === 'string' ? item.icon : (item.icon || '🔊')}
                             </div>
 
                             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                <strong style={{ fontSize: 15, color: 'var(--text)' }}>{item.title}</strong>
+                                <strong style={{ fontSize: 15, color: 'var(--text)' }}>
+                                    {item.title || item.name || 'Som detectado'}</strong>
                                 <small style={{ color: 'var(--muted)', fontSize: 12 }}>Confiança: {item.confidence}%</small>
                             </div>
 
