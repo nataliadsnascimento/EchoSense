@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,6 +25,9 @@ public class Historico {
     @JoinColumn(name = "id_ambiente", nullable = false)
     private Ambiente ambiente;
 
+    @Column(name = "data_hora", nullable = false)
+    private LocalDateTime dataHora;
+
     @Column(name = "periodo_inicio", nullable = false)
     private LocalDateTime periodoInicio;
 
@@ -37,9 +41,9 @@ public class Historico {
     private String tipoMaisFrequente;
 
     @PrePersist
-    protected void aoPersistir(){
-        if (this.periodoInicio == null){
-            this.periodoInicio = LocalDateTime.now();
+    protected void aoPersistir() {
+        if (this.dataHora == null) {
+            this.dataHora = LocalDateTime.now();
         }
     }
 }
