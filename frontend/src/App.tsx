@@ -7,6 +7,7 @@ import { LoginDesktop } from './pages/desktop/LoginDesktop';
 import { SignupDesktop } from './pages/desktop/SignupDesktop';
 import { SelectEnvironmentDesktop } from './pages/desktop/SelectEnvironmentDesktop';
 import { CustomizeEnvironmentDesktop } from './pages/desktop/CustomizeEnvironmentDesktop';
+import { HomeDesktop } from './pages/desktop/HomeDesktop';
 
 // === Importações do Mobile ===
 import { SplashScreen } from './pages/mobile/SplashScreen';
@@ -40,7 +41,7 @@ function getSoundIcon(soundName: string) {
     if (name.includes('cão') || name.includes('cachorro') || name.includes('latido')) return '🐕';
     if (name.includes('porta') || name.includes('batida')) return '🚪';
 
-    return '🔊'; // Ícone padrão
+    return '🔊';
 }
 
 export function App() {
@@ -53,6 +54,10 @@ export function App() {
     }, []);
 
     const [telaAtual, setTelaAtual] = useState('splash');
+
+    // Estados dinâmicos de dados do usuário vindos do cadastro/login
+    const [userName, setUserName] = useState('Carlos Melo');
+    const [userEmail, setUserEmail] = useState('carlos.melo@upe.br');
 
     // Estado para disparar o Alerta em Tempo Real
     const [alertaAtivo, setAlertaAtivo] = useState<{
@@ -130,8 +135,31 @@ export function App() {
 
         if (telaAtual === 'splash') return <SplashScreenDesktop onNext={() => setTelaAtual('onboarding')} />;
         if (telaAtual === 'onboarding') return <OnboardingDesktop onFinish={() => setTelaAtual('login')} />;
-        if (telaAtual === 'login') return <LoginDesktop onLoginSuccess={() => setTelaAtual('select-env')} onGoToSignup={() => setTelaAtual('cadastro')} />;
-        if (telaAtual === 'cadastro') return <SignupDesktop onSignupSuccess={() => setTelaAtual('select-env')} onGoToLogin={() => setTelaAtual('login')} />;
+
+        if (telaAtual === 'login') {
+            return (
+                <LoginDesktop
+                    onLoginSuccess={(email?: string) => {
+                        if (email) setUserEmail(email);
+                        setTelaAtual('select-env');
+                    }}
+                    onGoToSignup={() => setTelaAtual('cadastro')}
+                />
+            );
+        }
+
+        if (telaAtual === 'cadastro') {
+            return (
+                <SignupDesktop
+                    onSignupSuccess={(name?: string, email?: string) => {
+                        if (name) setUserName(name);
+                        if (email) setUserEmail(email);
+                        setTelaAtual('select-env');
+                    }}
+                    onGoToLogin={() => setTelaAtual('login')}
+                />
+            );
+        }
 
         if (telaAtual === 'select-env') {
             return (
@@ -157,35 +185,17 @@ export function App() {
 
         if (telaAtual === 'home') {
             return (
-                <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-900 text-white gap-4">
-                    <h1 className="text-2xl font-bold">Home (Desktop)</h1>
-                    <div className="flex gap-3">
-                        <button
-                            onClick={() => setTelaAtual('detected-sounds')}
-                            className="px-4 py-2 bg-purple-600 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
-                        >
-                            Ver Sons Detectados
-                        </button>
-                        <button
-                            onClick={() => {
-                                const nomeSom = 'Choro de Bebê';
-                                setAlertaAtivo({
-                                    soundName: nomeSom,
-                                    confidence: '95%',
-                                    time: new Date().toLocaleTimeString(),
-                                    icon: getSoundIcon(nomeSom),
-                                });
-                            }}
-                            className="px-4 py-2 bg-red-600 rounded-lg font-semibold hover:bg-red-700 transition cursor-pointer"
-                        >
-                            Simular Alerta
-                        </button>
-                    </div>
-                </div>
+                <HomeDesktop
+                    userName={userName}
+                    userEmail={userEmail}
+                    onNavigateToHistory={() => setTelaAtual('historico-alertas')}
+                    onNavigateToDetect={() => setTelaAtual('detectar-sons')}
+                    onLogout={() => setTelaAtual('login')}
+                />
             );
         }
 
-        if (telaAtual === 'detected-sounds') {
+        if (telaAtual === 'detected-sounds' || telaAtual === 'detectar-sons') {
             return (
                 <DetectedSounds
                     onBack={() => setTelaAtual('home')}
@@ -199,6 +209,20 @@ export function App() {
                         });
                     }}
                 />
+            );
+        }
+
+        if (telaAtual === 'historico-alertas') {
+            return (
+                <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-900 text-white gap-4">
+                    <h1 className="text-2xl font-bold">Histórico de Alertas (Desktop)</h1>
+                    <button
+                        onClick={() => setTelaAtual('home')}
+                        className="px-4 py-2 bg-purple-600 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
+                    >
+                        Voltar ao Início
+                    </button>
+                </div>
             );
         }
 
@@ -316,7 +340,7 @@ export function App() {
                             {/* Tela Principal (Home) */}
                             {telaAtual === 'home' && (
                                 <Home
-                                    userName="Natália"
+                                    userName={userName}
                                     onOpenSidebar={() => setIsSidebarOpen(true)}
                                     onNavigateToDetect={() => setTelaAtual('detected-sounds')}
                                     onNavigateToHistory={() => setTelaAtual('historico-alertas')}
@@ -350,7 +374,7 @@ export function App() {
                                     setIsSidebarOpen(false);
                                     setIsModalOpen(true);
                                 }}
-                                userName="Natália"
+                                userName={userName}
                             />
 
                             {/* Modal de Confirmação de Saída */}
