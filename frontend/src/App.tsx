@@ -8,6 +8,7 @@ import { SignupDesktop } from './pages/desktop/SignupDesktop';
 import { SelectEnvironmentDesktop } from './pages/desktop/SelectEnvironmentDesktop';
 import { CustomizeEnvironmentDesktop } from './pages/desktop/CustomizeEnvironmentDesktop';
 import { HomeDesktop } from './pages/desktop/HomeDesktop';
+import { AdvancedAnalysisDesktop } from './pages/desktop/AdvancedAnalysisDesktop'; // <-- 1. Importação da nova tela
 
 // === Importações do Mobile ===
 import { SplashScreen } from './pages/mobile/SplashScreen';
@@ -189,6 +190,22 @@ export function App() {
                     userName={userName}
                     userEmail={userEmail}
                     currentEnvironment={ambienteEscolhido}
+                    onNavigateToHistory={() => setTelaAtual('historico-alertas')}
+                    onNavigateToDetect={() => setTelaAtual('detectar-sons')}
+                    onNavigateToAdvancedAnalysis={() => setTelaAtual('analise-avancada')} // <-- 2. Navegar para Análise Avançada
+                    onLogout={() => setTelaAtual('login')}
+                />
+            );
+        }
+
+        // <-- 3. Nova Rota de Análise Avançada no Desktop
+        if (telaAtual === 'analise-avancada') {
+            return (
+                <AdvancedAnalysisDesktop
+                    userName={userName}
+                    userEmail={userEmail}
+                    currentEnvironment={ambienteEscolhido}
+                    onNavigateToHome={() => setTelaAtual('home')}
                     onNavigateToHistory={() => setTelaAtual('historico-alertas')}
                     onNavigateToDetect={() => setTelaAtual('detectar-sons')}
                     onLogout={() => setTelaAtual('login')}
