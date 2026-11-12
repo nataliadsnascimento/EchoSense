@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import logoIcon from '../../assets/som.png';
 
 interface Props {
-    onNext: () => void;
+    onNext: (ambiente: string) => void;
 }
 
 export function SelectEnvironment({ onNext }: Props) {
@@ -71,7 +71,7 @@ export function SelectEnvironment({ onNext }: Props) {
             {/* Botão Inferior */}
             <div className="flex flex-col items-center mb-1 z-10">
                 <button
-                    onClick={onNext}
+                    onClick={() => onNext(selectedEnv)}
                     className="w-full bg-[#5D4A88] hover:bg-[#4A2E7A] transition-colors text-white py-3.5 rounded-xl font-bold text-sm shadow-md"
                 >
                     Continuar
