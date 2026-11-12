@@ -16,22 +16,6 @@ public class SincronizacaoService {
 
     @Transactional
     public void processarSincronizacao(List<SincronizacaoItemDto> lote){
-        long inicio = System.currentTimeMillis();
-
-        for (SincronizacaoItemDto item : lote) {
-            repository.upsertEvento(
-                    item.getId(),
-                    item.getRegistro(),
-                    item.getDataAlteracao()
-            );
-        }
-
-        long tempoTotal = System.currentTimeMillis() - inicio;
-
-        if(tempoTotal >500){
-            System.out.println("Atenção! Processamento acima do limite de 500ms: " + tempoTotal + "ms");
-        }
-
-        System.out.println("Sincronização de" + lote.size() + " itens concluída em " + tempoTotal + "ms");
-        }
+        repository.upsertEventos(lote);
     }
+}
