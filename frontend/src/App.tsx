@@ -81,7 +81,7 @@ export function App() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Estados para guardar a escolha do ambiente no desktop
-    const [ambienteEscolhido, setAmbienteEscolhido] = useState('trabalho');
+    const [ambienteEscolhido, setAmbienteEscolhido] = useState<string>('trabalho');
     const [nomeOutro, setNomeOutro] = useState('');
 
     useEffect(() => {
@@ -98,12 +98,27 @@ export function App() {
         if (tab === 'detectar' || tab === 'detectar-sons') setTelaAtual('detectar-sons');
         if (tab === 'historico' || tab === 'historico-alertas') setTelaAtual('historico-alertas');
         if (tab === 'alertas' || tab === 'detected-sounds') {
-            setAlertaAtivo({
-                soundName: 'Campainha',
-                confidence: '88%',
-                time: '10:22:45',
-                icon: '🔔',
-            });
+
+               if (resultados && resultados.length > 0) {
+                const ultimoSom = resultados[0];
+                setAlertaAtivo({
+                    soundName: ultimoSom.name || 'Som detectado',
+                    confidence: `${ultimoSom.confidence}%`,
+                    time: ultimoSom.time || '10:22:45',
+                    icon: getSoundIcon(ultimoSom.name || ''),
+                });
+            } else {
+                // Fallback seguro: padrão de exemplo
+                setAlertaAtivo({
+                    soundName: 'Campainha',
+                    confidence: '88%',
+                    time: '10:22:45',
+                    icon: '🔔',
+                });
+                // Depois remove o setAlertaAtivo e coloca setTelaAtual('detectar-sons');
+               }
+        } else if (tab === 'perfil') {
+            setTelaAtual('perfil');
         }
     };
 
@@ -111,7 +126,15 @@ export function App() {
         title: string;
         confidence: string;
         dateOrTime: string;
+        duration?: string;
+        audioLevel?: string;
     } | null>(null);
+
+    const [filtrosHistorico, setFiltrosHistorico] = useState({
+        periodo: '7dias',
+        diasCustom: 3,
+        categoria: 'Todos',
+    });
 
     const irParaLogin = () => setTelaAtual('login');
 
@@ -238,6 +261,8 @@ export function App() {
                                     title: alertaAtivo.soundName,
                                     confidence: alertaAtivo.confidence,
                                     dateOrTime: alertaAtivo.time,
+                                    duration: (alertaAtivo as any)?.duration || '3.2 segundos',
+                                    audioLevel: (alertaAtivo as any)?.audioLevel || 'Alto',
                                 });
                                 setAlertaAtivo(null);
                                 setTelaAtual('detalhes-alerta');
@@ -268,7 +293,10 @@ export function App() {
 
                             {telaAtual === 'select-env' && (
                                 <SelectEnvironment
-                                    onNext={() => setTelaAtual('customize-env')}
+                                    onNext={(ambiente: string) => {
+                                        if (ambiente) setAmbienteEscolhido(ambiente);
+                                        setTelaAtual('customize-env');
+                                    }}
                                 />
                             )}
 
@@ -278,14 +306,15 @@ export function App() {
                                     onBack={() => setTelaAtual('historico-alertas')}
                                     onNavigate={handleNavigation}
                                     onDeleteEvent={() => {
-
                                         setTelaAtual('historico-alertas');
                                     }}
                                     mainAlert={detalhesAlertaSelecionado || {
-                                        title: 'Campainha',
-                                        confidence: '98%',
-                                        dateOrTime: '27/12/2026 10:23:45',
+                                        title: 'Som detectado',
+                                        confidence: '0%',
+                                        dateOrTime: '--:--',
                                     }}
+                                    duration={detalhesAlertaSelecionado?.duration || '3.2 segundos'}
+                                    audioLevel={detalhesAlertaSelecionado?.audioLevel || 'Alto'}
                                 />
                             )}
 
@@ -300,6 +329,7 @@ export function App() {
                         onBack={() => setTelaAtual('home')}
                         onNavigate={handleNavigation}
                         soundsList={resultados}
+                        ambienteAtual={ambienteEscolhido}
                     />
                 )}
 
@@ -309,6 +339,7 @@ export function App() {
                         onOpenFilter={() => setTelaAtual('filtros-historico')}
                         onNavigate={handleNavigation}
                         soundsList={resultados}
+                        ambienteAtual={ambienteEscolhido}
                         onSelectAlert={(alerta?: any) => {
                                 const nomeSom = alerta?.name || alerta?.title || 'Campainha';
                                 const conf = alerta?.confidence || '98%';
@@ -327,6 +358,18 @@ export function App() {
                 {telaAtual === 'filtros-historico' && (
                     <HistoryFilter
                         onBack={() => setTelaAtual('historico-alertas')}
+                        soundsList={resultados}
+                        ambienteAtual={ambienteEscolhido}
+                        onApply={(filtros) => {
+                            setFiltrosHistorico({
+                                periodo: filtros.periodo,
+                                diasCustom: filtros.diasCustom || 3,
+                                categoria: filtros.categoria,
+                            });
+                            if (filtros.ambiente && filtros.ambiente !== 'Todos') {
+                                setAmbienteEscolhido(filtros.ambiente);
+                            }
+                        }}
                     />
                 )}
 
@@ -334,8 +377,10 @@ export function App() {
                             {telaAtual === 'home' && (
                                 <Home
                                     userName="Natália"
+                                    ambienteAtual={ambienteEscolhido}
+                                    onSelectEnvironment={(novoAmbiente) => setAmbienteEscolhido(novoAmbiente)}
                                     onOpenSidebar={() => setIsSidebarOpen(true)}
-                                    onNavigateToDetect={() => setTelaAtual('detected-sounds')}
+                                    onNavigateToDetect={() => setTelaAtual('detectar-sons')}
                                     onNavigateToHistory={() => setTelaAtual('historico-alertas')}
                                 />
                             )}
@@ -403,7 +448,12 @@ return (
             }
 
             onDetection={(novoSom: SoundEvent) => {
-                setResultados((prev) => [novoSom, ...prev]);
+                const somComAmbiente = {
+                    ...novoSom,
+                    environment: ambienteEscolhido || 'Trabalho',
+                };
+
+                setResultados((prev) => [somComAmbiente, ...prev]);
 
                 if (Number(novoSom.confidence) >= 85) {
                     setAlertaAtivo({
@@ -411,7 +461,9 @@ return (
                         confidence: `${novoSom.confidence}%`,
                         time: novoSom.time || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                         icon: getSoundIcon(novoSom.name),
-                    });
+                        duration: (novoSom as any).duration ? `${(novoSom as any).duration}s` : '3.2 segundos',
+                        audioLevel: Number(novoSom.confidence) > 90 ? 'Muito Alto' : 'Alto',
+                    } as any);
                 }
             }}
         />
