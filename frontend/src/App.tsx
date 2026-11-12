@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-// === Importações do Desktop ===
 import { SplashScreenDesktop } from './pages/desktop/SplashScreenDesktop';
 import { OnboardingDesktop } from './pages/desktop/OnboardingDesktop';
 import { LoginDesktop } from './pages/desktop/LoginDesktop';
@@ -8,9 +7,9 @@ import { SignupDesktop } from './pages/desktop/SignupDesktop';
 import { SelectEnvironmentDesktop } from './pages/desktop/SelectEnvironmentDesktop';
 import { CustomizeEnvironmentDesktop } from './pages/desktop/CustomizeEnvironmentDesktop';
 import { HomeDesktop } from './pages/desktop/HomeDesktop';
-import { AdvancedAnalysisDesktop } from './pages/desktop/AdvancedAnalysisDesktop'; // <-- 1. Importação da nova tela
+import { AdvancedAnalysisDesktop } from './pages/desktop/AdvancedAnalysisDesktop';
+import { SoundDetectorDesktop } from './pages/desktop/SoundDetectorDesktop';
 
-// === Importações do Mobile ===
 import { SplashScreen } from './pages/mobile/SplashScreen';
 import { Onboarding1 } from './pages/mobile/Onboarding1';
 import { Onboarding2 } from './pages/mobile/Onboarding2';
@@ -28,11 +27,9 @@ import { AlertHistory } from "./pages/mobile/AlertHistory";
 import { HistoryFilter } from "./pages/mobile/HistoryFilter";
 import { AlertDetails } from "./components/AlertDetails.tsx";
 
-// === Componentes Globais / Modais ===
 import { Sidebar } from './components/Sidebar';
 import { ConfirmModal } from './components/ConfirmModal';
 
-// === Função Auxiliar para Ícones Dinâmicos ===
 function getSoundIcon(soundName: string) {
     const name = soundName.toLowerCase();
 
@@ -56,11 +53,9 @@ export function App() {
 
     const [telaAtual, setTelaAtual] = useState('splash');
 
-    // Estados dinâmicos de dados do usuário vindos do cadastro/login
     const [userName, setUserName] = useState('Carlos Melo');
     const [userEmail, setUserEmail] = useState('carlos.melo@upe.br');
 
-    // Estado para disparar o Alerta em Tempo Real
     const [alertaAtivo, setAlertaAtivo] = useState<{
         soundName: string;
         confidence: string;
@@ -68,11 +63,9 @@ export function App() {
         icon?: string;
     } | null>(null);
 
-    // Estados para o Menu Lateral e Modais no Mobile
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Estados para guardar a escolha do ambiente no desktop
     const [ambienteEscolhido, setAmbienteEscolhido] = useState('Casa');
     const [nomeOutro, setNomeOutro] = useState('');
 
@@ -107,7 +100,6 @@ export function App() {
 
     const irParaLogin = () => setTelaAtual('login');
 
-    // === RENDERIZAÇÃO DO FLUXO DESKTOP ===
     const renderDesktop = () => {
         if (alertaAtivo) {
             return (
@@ -192,13 +184,12 @@ export function App() {
                     currentEnvironment={ambienteEscolhido}
                     onNavigateToHistory={() => setTelaAtual('historico-alertas')}
                     onNavigateToDetect={() => setTelaAtual('detectar-sons')}
-                    onNavigateToAdvancedAnalysis={() => setTelaAtual('analise-avancada')} // <-- 2. Navegar para Análise Avançada
+                    onNavigateToAdvancedAnalysis={() => setTelaAtual('analise-avancada')}
                     onLogout={() => setTelaAtual('login')}
                 />
             );
         }
 
-        // <-- 3. Nova Rota de Análise Avançada no Desktop
         if (telaAtual === 'analise-avancada') {
             return (
                 <AdvancedAnalysisDesktop
@@ -215,17 +206,13 @@ export function App() {
 
         if (telaAtual === 'detected-sounds' || telaAtual === 'detectar-sons') {
             return (
-                <DetectedSounds
-                    onBack={() => setTelaAtual('home')}
-                    onSelectAlert={(alerta: any) => {
-                        const nomeSom = alerta?.name || 'Alarme de Incêndio';
-                        setAlertaAtivo({
-                            soundName: nomeSom,
-                            confidence: alerta?.confidence || '95%',
-                            time: alerta?.time || '10:30',
-                            icon: getSoundIcon(nomeSom),
-                        });
-                    }}
+                <SoundDetectorDesktop
+                    userName={userName}
+                    userEmail={userEmail}
+                    currentEnvironment={ambienteEscolhido}
+                    onNavigateToHome={() => setTelaAtual('home')}
+                    onNavigateToHistory={() => setTelaAtual('historico-alertas')}
+                    onLogout={() => setTelaAtual('login')}
                 />
             );
         }
@@ -247,13 +234,11 @@ export function App() {
         return null;
     };
 
-    // === RENDERIZAÇÃO DO FLUXO MOBILE ===
     const renderMobile = () => {
         return (
             <main className="bg-gray-950 min-h-screen w-full flex items-center justify-center p-2">
                 <div className="w-full max-w-[412px] h-[780px] bg-[#F8F7FA] shadow-2xl overflow-hidden rounded-[32px] border-4 border-gray-800 flex flex-col relative">
 
-                    {/* Alerta em Overlay/Modal quando ativado */}
                     {alertaAtivo ? (
                         <AlertScreen
                             soundName={alertaAtivo.soundName}
@@ -300,7 +285,6 @@ export function App() {
                                 />
                             )}
 
-                            {/* Rota para os Detalhes do Alerta */}
                             {telaAtual === 'detalhes-alerta' && (
                                 <AlertDetails
                                     onBack={() => setTelaAtual('historico-alertas')}
@@ -355,7 +339,6 @@ export function App() {
                                 />
                             )}
 
-                            {/* Tela Principal (Home) */}
                             {telaAtual === 'home' && (
                                 <Home
                                     userName={userName}
@@ -365,7 +348,6 @@ export function App() {
                                 />
                             )}
 
-                            {/* Tela de Sons Detectados */}
                             {telaAtual === 'detected-sounds' && (
                                 <DetectedSounds
                                     onBack={() => setTelaAtual('home')}
@@ -381,7 +363,6 @@ export function App() {
                                 />
                             )}
 
-                            {/* Menu Lateral (Sidebar) */}
                             <Sidebar
                                 isOpen={isSidebarOpen}
                                 onClose={() => setIsSidebarOpen(false)}
@@ -395,7 +376,6 @@ export function App() {
                                 userName={userName}
                             />
 
-                            {/* Modal de Confirmação de Saída */}
                             <ConfirmModal
                                 isOpen={isModalOpen}
                                 title="Tem certeza que deseja sair?"

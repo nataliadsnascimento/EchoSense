@@ -15,6 +15,7 @@ import {
 interface SidebarDesktopProps {
     activeTab?: string;
     onNavigate?: (tab: string) => void;
+    onNavigateToHome?: () => void;
     onNavigateToHistory?: () => void;
     onNavigateToDetect?: () => void;
     onLogout?: () => void;
@@ -25,6 +26,7 @@ interface SidebarDesktopProps {
 export function SidebarDesktop({
     activeTab = 'inicio',
     onNavigate,
+    onNavigateToHome,
     onNavigateToHistory,
     onNavigateToDetect,
     onLogout,
@@ -48,7 +50,7 @@ export function SidebarDesktop({
                     <span className="text-[10px] font-bold text-purple-300/40 uppercase tracking-wider block mb-3">Principal</span>
                     <div className="flex flex-col gap-1">
                          <button
-                             onClick={() => onNavigate?.('inicio')}
+                             onClick={() => { onNavigateToHome?.(); onNavigate?.('inicio'); }}
                              className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl font-bold text-xs shadow-md transition-colors cursor-pointer ${
                                  activeTab === 'inicio' ? 'bg-[#6C47FF] text-white' : 'text-purple-200/70 hover:bg-white/5 hover:text-white'
                              }`}

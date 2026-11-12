@@ -40,6 +40,7 @@ export function AdvancedAnalysisDesktop({
                          activeTab="inicio"
                          userName={userName}
                          userEmail={userEmail}
+                         onNavigateToHome={onNavigateToHome}
                          onNavigateToHistory={onNavigateToHistory}
                          onNavigateToDetect={onNavigateToDetect}
                          onLogout={onLogout}
@@ -280,4 +281,3 @@ export function AdvancedAnalysisDesktop({
         </div>
     );
 }
-
