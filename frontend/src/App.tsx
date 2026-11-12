@@ -72,7 +72,7 @@ export function App() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Estados para guardar a escolha do ambiente no desktop
-    const [ambienteEscolhido, setAmbienteEscolhido] = useState('trabalho');
+    const [ambienteEscolhido, setAmbienteEscolhido] = useState('Casa');
     const [nomeOutro, setNomeOutro] = useState('');
 
     useEffect(() => {
@@ -165,7 +165,7 @@ export function App() {
             return (
                 <SelectEnvironmentDesktop
                     onNext={(ambiente, outroTexto) => {
-                        setAmbienteEscolhido(ambiente);
+                        setAmbienteEscolhido(outroTexto || ambiente);
                         if (outroTexto) setNomeOutro(outroTexto);
                         setTelaAtual('customize-env');
                     }}
@@ -188,6 +188,7 @@ export function App() {
                 <HomeDesktop
                     userName={userName}
                     userEmail={userEmail}
+                    currentEnvironment={ambienteEscolhido}
                     onNavigateToHistory={() => setTelaAtual('historico-alertas')}
                     onNavigateToDetect={() => setTelaAtual('detectar-sons')}
                     onLogout={() => setTelaAtual('login')}
