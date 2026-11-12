@@ -11,30 +11,28 @@ import {
     Search,
     User
 } from 'lucide-react';
+import {getSoundIcon} from "../../components/getSoundIcon.tsx";
 
-interface HistoryGroup {
+interface SoundAlertItem {
     id: string;
     title: string;
     detections: number;
     time: string;
     confidence: number;
     icon: React.ReactNode;
+    environment?: string;
 }
 
 interface HistoricoAlertasProps {
     onBack?: () => void;
     onOpenFilter?: () => void;
     onNavigate?: (tab: string) => void;
+    soundsList?: SoundAlertItem[];
+    ambienteAtual?: string;
     onSelectAlert?: (alerta?: any) => void;
-    soundsList?:any[];
 }
 
-const historyGroups: HistoryGroup[] = [
-    { id: '1', title: 'Campainha', detections: 1, time: '10:15', confidence: 97, icon: <Bell size={20} /> },
-    { id: '2', title: 'Choro de bebê', detections: 1, time: '09:56', confidence: 93, icon: <Baby size={20} /> }
-];
-
-export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFilter, onNavigate, soundsList = [] }) => {
+export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFilter, onNavigate, soundsList = [], ambienteAtual, onSelectAlert }) => {
     const [feedbacks, setFeedbacks] = useState<{ [key: string]: string }>({});
 
     const handleFeedbackChange = (id: string, text: string) => {
@@ -49,7 +47,11 @@ export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFi
         }
     };
 
-    const listToRender = soundsList && soundsList.length > 0 ? soundsList : historyGroups;
+    const listToRender = (soundsList || []).filter((item) => {
+        if (!item) return false;
+        if (!item.environment || !ambienteAtual || ambienteAtual === 'Todos') return true;
+        return String(item.environment).toLowerCase() === String(ambienteAtual).toLowerCase();
+    });
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#F8F7FA', paddingBottom: 0 }}>
@@ -115,18 +117,18 @@ export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFi
             </div>
 
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto', paddingBottom: 10 }}>
-                {listToRender.map((group) => (
-                    <div
-                        key={group.id || Math.random()}
-                        style={{
-                            background: 'white',
-                            borderRadius: 16,
-                            border: '1px solid #EFEAF8',
-                            overflow: 'hidden',
-                            boxShadow: '0 2px 8px rgba(92, 60, 146, 0.04)'
-                        }}
+                {listToRender.length > 0 ? (
+                    listToRender.map((group) => (
+                        <div
+                            key={group.id || Math.random()}
+                            style={{
+                                background: 'white',
+                                borderRadius: 16,
+                                border: '1px solid #EFEAF8',
+                                overflow: 'hidden',
+                                boxShadow: '0 2px 8px rgba(92, 60, 146, 0.04)'
+                            }}
                     >
-
                         <div
                             style={{
                                 background: '#EDE8F7',
@@ -148,7 +150,7 @@ export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFi
                                     color: 'var(--purple, #5c3c92)'
                                 }}
                             >
-                                {typeof group.icon === 'string' ? group.icon : (group.icon || '🔊')}
+                                {getSoundIcon(group.name || group.title)}
                             </div>
                             <div>
                                 <h3 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: '#2D2342' }}>{group.title}</h3>
@@ -252,7 +254,12 @@ export const AlertHistory: React.FC<HistoricoAlertasProps> = ({ onBack, onOpenFi
                             </div>
                         </div>
                     </div>
-                ))}
+                ))
+            ) : (
+                    <div style={{ padding: '40px 16px', textAlign: 'center', color: '#7E7694', fontSize: 13 }}>
+                        Nenhum som detectado no ambiente <strong>{ambienteAtual || 'atual'}</strong> ainda.
+                    </div>
+                )}
             </div>
 
             <nav style={{

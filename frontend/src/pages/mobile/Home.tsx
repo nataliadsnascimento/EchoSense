@@ -2,27 +2,36 @@ import React, {useState} from 'react';
 
 interface HomeProps {
     userName?: string;
+    ambienteAtual?: string;
+    onSelectEnvironment?: (ambiente: string) => void;
     onOpenSidebar: () => void;
     onNavigateToDetect: () => void;
     onNavigateToHistory?: () => void;
 }
 
-export function Home({userName = "Usuário", onOpenSidebar, onNavigateToDetect, onNavigateToHistory}: HomeProps){
-    const [environment, setEnvironment] = useState<'casa' | 'trabalho'>('casa');
-    const [isMonitoring, setIsMonitoring] = useState(true);
+export function Home({userName = "Usuário", ambienteAtual = "casa", onSelectEnvironment, onOpenSidebar, onNavigateToDetect, onNavigateToHistory}: HomeProps){
 
-    const alertsData = environment === 'casa' ? [
-        {id: 1, title: 'Campainha', time: 'Hoje, 10:23', icon: '🔔'},
-        {id: 2, title: 'Choro de Bebê', time: 'Hoje, 09:15', icon: '👶'},
-        {id: 3, title: 'Alarme', time: 'Ontem, 22:47', icon: '⚠️'},
-        {id: 4, title: 'Porta Batendo', time: 'Ontem, 18:30', icon: '🚪'},
+    const [isMonitoring, setIsMonitoring] = useState(true);
+    const isCasa = String(ambienteAtual || 'casa').toLowerCase() === 'casa';
+
+    const alertsData =  isCasa ? [
+        {id: '1', title: 'Campainha', time: 'Hoje, 10:23', icon: '🔔'},
+        {id: '2', title: 'Choro de Bebê', time: 'Hoje, 09:15', icon: '👶'},
+        {id: '3', title: 'Alarme', time: 'Ontem, 22:47', icon: '⚠️'},
+        {id: '4', title: 'Porta Batendo', time: 'Ontem, 18:30', icon: '🚪'},
     ] : [
-        {id: 1, title: 'Passos', time: 'Hoje, 10:23', icon: '👣'},
-        {id: 2, title: 'Vozes no Ambiente', time: 'Hoje, 09:15', icon: '🗣️'},
-        {id: 3, title: 'Impressora', time: 'Ontem, 22:47', icon: '🖨️'},
-        {id: 4, title: 'Porta Fechando', time: 'Ontem, 18:30', icon: '🚪'}
+        {id: '1', title: 'Passos', time: 'Hoje, 10:23', icon: '👣'},
+        {id: '2', title: 'Vozes no Ambiente', time: 'Hoje, 09:15', icon: '🗣️'},
+        {id: '3', title: 'Impressora', time: 'Ontem, 22:47', icon: '🖨️'},
+        {id: '4', title: 'Porta Fechando', time: 'Ontem, 18:30', icon: '🚪'}
     ];
 
+    const handleToggleEnvironment = () => {
+        const proximoAmbiente = isCasa ? 'trabalho' : 'casa';
+        if (onSelectEnvironment) {
+            onSelectEnvironment(proximoAmbiente);
+        }
+    };
 
     return (
         <div className="flex-1 bg-[#F8F7FA] flex flex-col font-sans p-4 pb-20 overflow-y-auto">
@@ -52,15 +61,15 @@ export function Home({userName = "Usuário", onOpenSidebar, onNavigateToDetect, 
          <div className="bg-white rounded-[20px] p-3.5 shadow-sm border border-gray-100 mb-3 flex items-center justify-between">
            <div className="flex items-center gap-3">
              <div className="w-8 h-8 rounded-xl bg-purple-50 flex items-center justify-center text-[#5D4A88]">
-               {environment === 'casa' ? '🏠' : '💼'}
+                 {isCasa ? '🏠' : '💼'}
              </div>
              <div>
                <span className="text-[10px] font-bold text-gray-400 uppercase">Ambiente atual</span>
-               <p className="text-xs font-bold text-gray-800 capitalize">{environment === 'casa' ? 'Casa' : 'Trabalho'}</p>
+               <p className="text-xs font-bold text-gray-800 capitalize">{ambienteAtual}</p>
               </div>
              </div>
              <button
-               onClick={() => setEnvironment(environment === 'casa' ? 'trabalho' : 'casa')}
+               onClick={handleToggleEnvironment}
                className="text-xs font-bold text-[#5D4A88] hover:underline"
              >
                Trocar ambiente ›
@@ -101,7 +110,7 @@ export function Home({userName = "Usuário", onOpenSidebar, onNavigateToDetect, 
         {/* Lista de Alertas Recentes */}
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-xs font-bold text-gray-800">Últimos alertas</h3>
-          <button onClick={onNavigateToHistory} className="text-[10px] font-bold text-[#5D4A88]">Ver todos</button>
+          <button onClick={() => onNavigateToHistory?.()} className="text-[10px] font-bold text-[#5D4A88]">Ver todos</button>
         </div>
 
         <div className="flex flex-col gap-2">
