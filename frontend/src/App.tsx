@@ -27,8 +27,8 @@ import {SoundDetector} from "./pages/mobile/SoundDetector";
 import {AlertHistory} from "./pages/mobile/AlertHistory";
 import {HistoryFilter} from "./pages/mobile/HistoryFilter";
 import {AlertDetails} from "./components/AlertDetails";
-import {UserProfile} from "./pages/mobile/UserProfile.tsx";
-
+import {UserProfile} from "./pages/mobile/UserProfile";
+import {ChangePasswordScreen} from "./pages/mobile/ChangePasswordScreen";
 
 // === Componentes Globais / Modais ===
 import { Sidebar } from './components/Sidebar';
@@ -418,7 +418,15 @@ export function App() {
                                     onNavigate={handleNavigation}
                                     onLogout={() => setTelaAtual('login')}
                                     onOpenLogoutModal={() => setIsModalOpen(true)}
+                                    onOpenChangePassword={() => setTelaAtual('alterar-senha')}
                                     //onOpenSettings={() => setTelaAtual('configuracoes')}
+                                />
+                            )}
+
+                            {telaAtual == 'alterar-senha' && (
+                                <ChangePasswordScreen
+                                    onBack={() => setTelaAtual('perfil')}
+                                    onSuccess={() => setTelaAtual('perfil')}
                                 />
                             )}
 
