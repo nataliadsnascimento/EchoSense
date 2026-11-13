@@ -18,15 +18,16 @@ interface UserProfileProps {
     userEmail?: string;
     onOpenSettings?: () => void;
     onOpenLogoutModal?: () => void;
+    onOpenChangePassword?: () => void;
 }
 
 export const UserProfile: React.FC<UserProfileProps> = ({
                                                             onNavigate,
-                                                            onLogout,
                                                             userName,
                                                             userEmail,
                                                             onOpenSettings,
-                                                            onOpenLogoutModal
+                                                            onOpenLogoutModal,
+                                                            onOpenChangePassword
                                                         }) => {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#F8F7FA', paddingBottom: 0 }}>
@@ -73,7 +74,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                         <ChevronRight size={18} style={{ color: '#7E7694' }} />
                     </div>
 
-                    <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #F0ECF8', cursor: 'pointer' }}>
+                    <div
+                        onClick={onOpenChangePassword}
+                        style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #F0ECF8', cursor: 'pointer' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                             <div style={{ width: 32, height: 32, borderRadius: 10, background: '#EDE8F7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--purple, #5c3c92)' }}>
                                 <Lock size={16} />
