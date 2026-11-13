@@ -26,7 +26,9 @@ import { AlertScreen } from './pages/mobile/AlertScreen';
 import {SoundDetector} from "./pages/mobile/SoundDetector";
 import {AlertHistory} from "./pages/mobile/AlertHistory";
 import {HistoryFilter} from "./pages/mobile/HistoryFilter";
-import {AlertDetails} from "./components/AlertDetails.tsx";
+import {AlertDetails} from "./components/AlertDetails";
+import {UserProfile} from "./pages/mobile/UserProfile.tsx";
+
 
 // === Componentes Globais / Modais ===
 import { Sidebar } from './components/Sidebar';
@@ -63,6 +65,10 @@ export function App() {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    //Estados do usuário
+    const [nomeUsuario, setNomeUsuario] = useState('');
+    const [emailUsuario, setEmailUsuario] = useState('');
 
     const [telaAtual, setTelaAtual] = useState('splash');
     const [resultados, setResultados] = useState<SoundEvent[]>([]);
@@ -286,7 +292,11 @@ export function App() {
 
                             {telaAtual === 'cadastro' && (
                                 <Signup
-                                    onSignupSuccess={() => setTelaAtual('select-env')}
+                                    onSignupSuccess={(nomeDigitado, emailDigitado) => {
+                                        setNomeUsuario(nomeDigitado);
+                                        setEmailUsuario(emailDigitado);
+                                        setTelaAtual('select-env');
+                                    }}
                                     onGoToLogin={irParaLogin}
                                 />
                             )}
@@ -398,6 +408,17 @@ export function App() {
                                             icon: getSoundIcon(nomeSom),
                                         });
                                     }}
+                                />
+                            )}
+
+                            {telaAtual === 'perfil' && (
+                                <UserProfile
+                                    userName={nomeUsuario}
+                                    userEmail={emailUsuario}
+                                    onNavigate={handleNavigation}
+                                    onLogout={() => setTelaAtual('login')}
+                                    onOpenLogoutModal={() => setIsModalOpen(true)}
+                                    //onOpenSettings={() => setTelaAtual('configuracoes')}
                                 />
                             )}
 
