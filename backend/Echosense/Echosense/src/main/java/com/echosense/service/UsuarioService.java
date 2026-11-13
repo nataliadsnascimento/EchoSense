@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -18,15 +19,18 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final AmbienteRepository ambienteRepository;
     private final ConfiguracaoUsuarioRepository configuracaoRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
             AmbienteRepository ambienteRepository,
-            ConfiguracaoUsuarioRepository configuracaoRepository) {
+            ConfiguracaoUsuarioRepository configuracaoRepository,
+            PasswordEncoder passwordEncoder) {
 
         this.usuarioRepository = usuarioRepository;
         this.ambienteRepository = ambienteRepository;
         this.configuracaoRepository = configuracaoRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Usuario buscarPorId(Long id) {
@@ -43,6 +47,20 @@ public class UsuarioService {
         usuario.setNome(usuarioAtualizado.getNome());
         usuario.setSobrenome(usuarioAtualizado.getSobrenome());
 
+        if (usuarioAtualizado.getEmail() != null &&
+                !usuarioAtualizado.getEmail().isBlank() &&
+                !usuarioAtualizado.getEmail().equals(usuario.getEmail())) {
+
+            if (usuarioRepository.existsByEmail(usuarioAtualizado.getEmail())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "E-mail já cadastrado");
+            }
+
+            usuario.setEmail(usuarioAtualizado.getEmail());
+        }
+
+        if (usuarioAtualizado.getSenha() != null && !usuarioAtualizado.getSenha().isBlank()) {
+            usuario.setSenha(passwordEncoder.encode(usuarioAtualizado.getSenha()));
+        }
         return usuarioRepository.save(usuario);
     }
 

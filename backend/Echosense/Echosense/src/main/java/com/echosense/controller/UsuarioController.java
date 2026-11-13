@@ -30,11 +30,16 @@ public class UsuarioController {
     @PutMapping("/{id}")
     public ResponseEntity<DadosUsuarioResponse> atualizarUsuario(
             @PathVariable Long id,
-            @RequestBody Usuario usuarioAtualizado) {
+            @RequestBody Usuario usuarioAtualizado,
+            Authentication authentication) {
 
-        Usuario usuario =
-                usuarioService.atualizarUsuario(id, usuarioAtualizado);
+        Usuario usuarioAutenticado = (Usuario) authentication.getPrincipal();
 
+        if (!usuarioAutenticado.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        Usuario usuario = usuarioService.atualizarUsuario(id, usuarioAtualizado);
         return ResponseEntity.ok(converterParaDTO(usuario));
     }
 
