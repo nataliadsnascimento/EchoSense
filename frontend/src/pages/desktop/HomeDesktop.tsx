@@ -31,9 +31,10 @@ interface HomeDesktopProps {
     deviceCount?: number;
     alerts?: AlertItem[];
     frequentSounds?: { name: string; percentage: number; color: string }[];
+    onNavigate?: (tab: string) => void; // <-- Adicionado aqui
     onNavigateToHistory: () => void;
     onNavigateToDetect: () => void;
-    onNavigateToAdvancedAnalysis: () => void; // <-- Adicionado aqui
+    onNavigateToAdvancedAnalysis: () => void;
     onLogout: () => void;
 }
 
@@ -54,9 +55,10 @@ export function HomeDesktop({
         { name: 'Choro de bebê', percentage: 30, color: 'bg-purple-400' },
         { name: 'Alarme', percentage: 15, color: 'bg-rose-500' },
     ],
+    onNavigate, // <-- Recebido aqui
     onNavigateToHistory,
     onNavigateToDetect,
-    onNavigateToAdvancedAnalysis, // <-- Adicionado aqui
+    onNavigateToAdvancedAnalysis,
     onLogout
 }: HomeDesktopProps) {
     const firstName = userName.split(' ')[0];
@@ -70,6 +72,7 @@ export function HomeDesktop({
                         activeTab="inicio"
                         userName={userName}
                         userEmail={userEmail}
+                        onNavigate={onNavigate} // <-- Repassado para a SidebarDesktop
                         onNavigateToHistory={onNavigateToHistory}
                         onNavigateToDetect={onNavigateToDetect}
                         onLogout={onLogout}
@@ -134,7 +137,7 @@ export function HomeDesktop({
                     </button>
 
                     <button
-                        onClick={onNavigateToAdvancedAnalysis} // <-- Chama a função para abrir a Análise Avançada
+                        onClick={onNavigateToAdvancedAnalysis}
                         className="pb-3 text-sm font-semibold text-purple-300/50 hover:text-purple-200 transition-all cursor-pointer relative"
                     >
                         Análise avançada

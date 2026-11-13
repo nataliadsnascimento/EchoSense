@@ -18,6 +18,7 @@ interface SidebarDesktopProps {
     onNavigateToHome?: () => void;
     onNavigateToHistory?: () => void;
     onNavigateToDetect?: () => void;
+    onNavigateToAlerts?: () => void;
     onLogout?: () => void;
     userName: string;
     userEmail: string;
@@ -29,6 +30,7 @@ export function SidebarDesktop({
     onNavigateToHome,
     onNavigateToHistory,
     onNavigateToDetect,
+    onNavigateToAlerts,
     onLogout,
     userName,
     userEmail
@@ -77,7 +79,7 @@ export function SidebarDesktop({
                              Detectar sons
                          </button>
                          <button
-                             onClick={() => onNavigate?.('alertas')}
+                             onClick={() => { onNavigateToAlerts?.(); onNavigate?.('alertas'); }}
                              className={`flex items-center justify-between w-full px-4 py-3 rounded-2xl font-semibold text-xs transition-colors cursor-pointer ${
                                   activeTab === 'alertas' ? 'bg-[#6C47FF] text-white' : 'text-purple-200/70 hover:bg-white/5 hover:text-white'
                              }`}

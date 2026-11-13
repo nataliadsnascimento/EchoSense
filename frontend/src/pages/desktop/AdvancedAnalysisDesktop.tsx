@@ -13,6 +13,7 @@ interface AdvancedAnalysisProps {
     userName: string;
     userEmail: string;
     currentEnvironment?: string;
+    onNavigate?: (tab: string) => void;
     onNavigateToHome: () => void;
     onNavigateToHistory: () => void;
     onNavigateToDetect: () => void;
@@ -23,6 +24,7 @@ export function AdvancedAnalysisDesktop({
     userName,
     userEmail,
     currentEnvironment = 'Casa',
+    onNavigate,
     onNavigateToHome,
     onNavigateToHistory,
     onNavigateToDetect,
@@ -40,6 +42,10 @@ export function AdvancedAnalysisDesktop({
                          activeTab="inicio"
                          userName={userName}
                          userEmail={userEmail}
+                         onNavigate={(tab) => {
+                             setIsSidebarOpen(false);
+                             onNavigate?.(tab);
+                         }}
                          onNavigateToHome={onNavigateToHome}
                          onNavigateToHistory={onNavigateToHistory}
                          onNavigateToDetect={onNavigateToDetect}
@@ -81,7 +87,11 @@ export function AdvancedAnalysisDesktop({
                              </div>
                          </div>
 
-                         <button className="bg-[#111029] border border-white/5 p-3 rounded-2xl text-purple-300 hover:text-white transition-colors relative cursor-pointer">
+                         <button
+                             onClick={() => onNavigate?.('alertas')}
+                             className="bg-[#111029] border border-white/5 p-3 rounded-2xl text-purple-300 hover:text-white transition-colors relative cursor-pointer"
+                             title="Ver alertas"
+                         >
                              <Bell size={18} />
                              <span className="absolute top-2 right-2 w-2 h-2 bg-purple-500 rounded-full"></span>
                          </button>
