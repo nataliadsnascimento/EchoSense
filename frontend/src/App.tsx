@@ -32,6 +32,7 @@ import {ChangePasswordScreen} from "./pages/mobile/ChangePasswordScreen";
 import {GeneralSettings} from "./pages/mobile/GeneralSettings";
 import {OfflineSync} from "./pages/mobile/OfflineSync";
 import {AboutApp} from "./pages/mobile/AboutApp";
+import {HelpSupport} from "./pages/mobile/HelpSupport";
 
 // === Componentes Globais / Modais ===
 import { Sidebar } from './components/Sidebar';
@@ -458,11 +459,20 @@ export function App() {
                                 />
                             )}
 
-                            //Alterar na integração
+                            {/*Alterar na integração*/}
                             {telaAtual === 'sobre-app' && (
                                 <AboutApp
                                     onBack={() => setTelaAtual('perfil')}
                                     onNavigate={handleNavigation}
+                                />
+                            )}
+
+                            {/*Alterar na integração*/}
+                            {telaAtual === 'ajuda-suporte' && (
+                                <HelpSupport
+                                    onBack={() => setTelaAtual('perfil')}
+                                    onNavigate={handleNavigation}
+                                    onOpenChat={() => alert('Abrindo chat de suporte...')}
                                 />
                             )}
 
