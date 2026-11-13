@@ -29,6 +29,7 @@ import {HistoryFilter} from "./pages/mobile/HistoryFilter";
 import {AlertDetails} from "./components/AlertDetails";
 import {UserProfile} from "./pages/mobile/UserProfile";
 import {ChangePasswordScreen} from "./pages/mobile/ChangePasswordScreen";
+import {GeneralSettings} from "./pages/mobile/GeneralSettings";
 
 // === Componentes Globais / Modais ===
 import { Sidebar } from './components/Sidebar';
@@ -419,7 +420,7 @@ export function App() {
                                     onLogout={() => setTelaAtual('login')}
                                     onOpenLogoutModal={() => setIsModalOpen(true)}
                                     onOpenChangePassword={() => setTelaAtual('alterar-senha')}
-                                    //onOpenSettings={() => setTelaAtual('configuracoes')}
+                                    onOpenSettings={() => setTelaAtual('configuracoes-gerais')}
                                 />
                             )}
 
@@ -430,12 +431,23 @@ export function App() {
                                 />
                             )}
 
+                            {telaAtual === 'configuracoes-gerais' && (
+                                <GeneralSettings
+                                    onBack={() => setTelaAtual('perfil')}
+                                    onNavigate={handleNavigation}
+                                />
+                            )}
+
                             {/* Menu Lateral (Sidebar) */}
                             <Sidebar
                                 isOpen={isSidebarOpen}
                                 onClose={() => setIsSidebarOpen(false)}
                                 onNavigate={(page) => {
                                     handleNavigation(page);
+                                }}
+                                onOpenSettings={() => {
+                                    setIsSidebarOpen(false);
+                                    setTelaAtual('configuracoes-gerais');
                                 }}
                                 onOpenLogoutModal={() => {
                                     setIsSidebarOpen(false);
