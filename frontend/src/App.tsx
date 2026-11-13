@@ -30,6 +30,7 @@ import {AlertDetails} from "./components/AlertDetails";
 import {UserProfile} from "./pages/mobile/UserProfile";
 import {ChangePasswordScreen} from "./pages/mobile/ChangePasswordScreen";
 import {GeneralSettings} from "./pages/mobile/GeneralSettings";
+import {OfflineSync} from "./pages/mobile/OfflineSync.tsx";
 
 // === Componentes Globais / Modais ===
 import { Sidebar } from './components/Sidebar';
@@ -435,6 +436,24 @@ export function App() {
                                 <GeneralSettings
                                     onBack={() => setTelaAtual('perfil')}
                                     onNavigate={handleNavigation}
+                                />
+                            )}
+
+                            {telaAtual === 'sincronizacao' && (
+                                <OfflineSync
+                                    onBack={() => setTelaAtual('perfil')}
+                                    onNavigate={handleNavigation}
+                                    eventosPendentes={resultados.map(som => ({
+                                        id: som.id,
+                                        name: som.name,
+                                        time: som.time,
+                                        date: som.date || 'Hoje',
+                                        icon: getSoundIcon(som.name)
+                                    }))}
+                                    isOffline={true}
+                                    onSyncNow={() => {
+                                        alert('Sincronizando com o servidor...');
+                                    }}
                                 />
                             )}
 
