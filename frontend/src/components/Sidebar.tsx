@@ -4,11 +4,12 @@ interface SidebarProps {
     isOpen: boolean;
     onClose: () => void;
     onNavigate: (page: string) => void;
+    onOpenSettings: () => void;
     onOpenLogoutModal: () => void;
     userName?: string;
 }
 
-export function Sidebar({ isOpen, onClose, onNavigate, onOpenLogoutModal, userName = "Usuário" }: SidebarProps) {
+export function Sidebar({ isOpen, onClose, onNavigate, onOpenLogoutModal, userName = "Usuário", onOpenSettings}: SidebarProps) {
     if (!isOpen) return null;
 
     return (
@@ -55,7 +56,7 @@ export function Sidebar({ isOpen, onClose, onNavigate, onOpenLogoutModal, userNa
                         <button onClick={() => { onNavigate('alertas'); onClose(); }} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/10 text-left">
                             <span>🔔</span> Alertas
                         </button>
-                        <button onClick={() => { onNavigate('configuracoes'); onClose(); }} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/10 text-left">
+                        <button onClick={() => { onClose(); onOpenSettings(); }} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/10 text-left">
                             <span>⚙️</span> Configurações
                         </button>
                     </nav>

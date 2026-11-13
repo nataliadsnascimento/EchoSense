@@ -83,6 +83,17 @@ export function AlertaAutomatico({
             principal.pontuacao
         );
 
+        if (onDetection) {
+            onDetection({
+                id: String(Date.now()),
+                name: principal.classe || 'Som detectado',
+                confidence: Math.round(principal.pontuacao * 100),
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                date: new Date().toLocaleDateString(),
+                isAlarm: principal.pontuacao >= 0.85
+            });
+        }
+
     }, [ativo, resultados]);
 
     useEffect(() => {

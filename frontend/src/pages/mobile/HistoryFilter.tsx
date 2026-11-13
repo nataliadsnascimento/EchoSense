@@ -1,37 +1,19 @@
 import React, { useState } from 'react';
 import {
     ChevronDown,
-    Baby,
-    AlertTriangle,
-    DoorClosed,
-    Dog,
     ChevronLeft
 } from 'lucide-react';
 import { CustomDateFilters } from '../../components/CustomDateFilters.tsx';
-
-interface SoundPreview {
-    id: string;
-    title: string;
-    confidence: number;
-    time: string;
-    diasAtras: number;
-    icon: React.ReactNode;
-    isAlarm?: boolean;
-}
+import { getSoundIcon } from '../../components/getSoundIcon.tsx';
 
 interface FiltrosHistoricoProps {
     onBack?: () => void;
-    onApply?: (filtros: { periodo: string; diasCustom?: number; categoria: string }) => void;
+    onApply?: (filtros: { periodo: string; diasCustom?: number; categoria: string; ambiente?: string }) => void;
+    soundsList?: any[];
+    ambienteAtual?: string;
 }
 
-const sampleSounds: SoundPreview[] = [
-    { id: '1', title: 'Choro de bebê', confidence: 97, time: '10:15:32', diasAtras: 0, icon: <Baby size={20} /> },
-    { id: '2', title: 'Alarme', confidence: 96, time: '09:47:21', diasAtras: 2, icon: <AlertTriangle size={20} />, isAlarm: true },
-    { id: '3', title: 'Porta batendo', confidence: 93, time: '09:20:11', diasAtras: 5, icon: <DoorClosed size={20} /> },
-    { id: '4', title: 'Cachorro latindo', confidence: 93, time: '09:56:03', diasAtras: 12, icon: <Dog size={20} /> }
-];
-
-export const HistoryFilter: React.FC<FiltrosHistoricoProps> = ({ onBack, onApply }) => {
+export const HistoryFilter: React.FC<FiltrosHistoricoProps> = ({ onBack, onApply, soundsList = [], ambienteAtual = 'Todos'}) => {
     const DEFAULT_PERIOD = '7dias';
     const DEFAULT_CATEGORY = 'Todos';
     const DEFAULT_CUSTOM_DAYS = 3;
@@ -39,11 +21,13 @@ export const HistoryFilter: React.FC<FiltrosHistoricoProps> = ({ onBack, onApply
     const [selectedPeriod, setSelectedPeriod] = useState<string>(DEFAULT_PERIOD);
     const [customDays, setCustomDays] = useState<number>(DEFAULT_CUSTOM_DAYS);
     const [selectedCategory, setSelectedCategory] = useState<string>(DEFAULT_CATEGORY);
+    const [selectedAmbiente, setSelectedAmbiente] = useState<string>(ambienteAtual);
 
     const [appliedFilters, setAppliedFilters] = useState({
         periodo: DEFAULT_PERIOD,
         diasCustom: DEFAULT_CUSTOM_DAYS,
-        categoria: DEFAULT_CATEGORY
+        categoria: DEFAULT_CATEGORY,
+        ambiente : ambienteAtual
     });
 
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
@@ -66,7 +50,8 @@ export const HistoryFilter: React.FC<FiltrosHistoricoProps> = ({ onBack, onApply
         const novosFiltros = {
             periodo: selectedPeriod,
             diasCustom: customDays,
-            categoria: selectedCategory
+            categoria: selectedCategory,
+            ambiente : ambienteAtual
         };
 
         setAppliedFilters(novosFiltros);
@@ -77,33 +62,34 @@ export const HistoryFilter: React.FC<FiltrosHistoricoProps> = ({ onBack, onApply
         const padrao = {
             periodo: DEFAULT_PERIOD,
             diasCustom: DEFAULT_CUSTOM_DAYS,
-            categoria: DEFAULT_CATEGORY
+            categoria: DEFAULT_CATEGORY,
+            ambiente : 'Todos'
         };
 
         setSelectedPeriod(DEFAULT_PERIOD);
         setSelectedCategory(DEFAULT_CATEGORY);
         setCustomDays(DEFAULT_CUSTOM_DAYS);
-        setAppliedFilters(padrao);
+        setSelectedAmbiente('Todos');
     };
 
-    const filteredSounds = sampleSounds.filter(item => {
-        const matchCategory = appliedFilters.categoria === 'Todos' || item.title === appliedFilters.categoria;
+    const filteredSounds = soundsList.filter(item => {
+        const matchCategory = selectedCategory === 'Todos' || (item.title || item.name) === selectedCategory;
 
         let matchPeriod = true;
-        if (appliedFilters.periodo === 'hoje') {
+        if (selectedPeriod === 'hoje') {
             matchPeriod = item.diasAtras === 0;
-        } else if (appliedFilters.periodo === '7dias') {
+        } else if (selectedPeriod === '7dias') {
             matchPeriod = item.diasAtras <= 7;
-        } else if (appliedFilters.periodo === '30dias') {
+        } else if (selectedPeriod === '30dias') {
             matchPeriod = item.diasAtras <= 30;
-        } else if (appliedFilters.periodo === 'custom') {
-            matchPeriod = item.diasAtras <= appliedFilters.diasCustom;
+        } else if (selectedPeriod === 'custom') {
+            matchPeriod = item.diasAtras <= customDays;
         }
 
         return matchCategory && matchPeriod;
     });
 
-    const categories = ['Todos', 'Choro de bebê', 'Alarme', 'Porta batendo', 'Cachorro latindo'];
+    const categories = ['Todos', ...Array.from( new Set( soundsList.map((item) => item.title || item.name).filter(Boolean)))];
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#F8F7FA', paddingBottom: 16 }}>
@@ -151,7 +137,7 @@ export const HistoryFilter: React.FC<FiltrosHistoricoProps> = ({ onBack, onApply
                         borderRadius: 20,
                         border: '1px solid #EFEAF8',
                         overflow: 'hidden',
-                        boxShadow: '0 4px 12px rgba(92, 60, 146, 0.04)'
+                        boxShadow: '0 4px 12px rgba(92, 60, 146, 0.04)',
                     }}
                 >
                     <div
@@ -173,7 +159,7 @@ export const HistoryFilter: React.FC<FiltrosHistoricoProps> = ({ onBack, onApply
                     </div>
 
                     {isDropdownOpen && (
-                        <div style={{ background: '#F4EFFC', borderBottom: '1px solid #EFEAF8' }}>
+                        <div style={{ background: '#F4EFFC', borderBottom: '1px solid #EFEAF8', maxHeight: 180, overflowY: 'auto'}}>
                             {categories.map((cat) => (
                                 <div
                                     key={cat}
@@ -187,7 +173,7 @@ export const HistoryFilter: React.FC<FiltrosHistoricoProps> = ({ onBack, onApply
                                         fontWeight: selectedCategory === cat ? 700 : 500,
                                         color: selectedCategory === cat ? 'var(--purple, #5c3c92)' : '#4A4458',
                                         cursor: 'pointer',
-                                        borderBottom: '1px solid #EBE4F7'
+                                        borderBottom: '1px solid #EBE4F7',
                                     }}
                                 >
                                     {cat}
@@ -196,16 +182,17 @@ export const HistoryFilter: React.FC<FiltrosHistoricoProps> = ({ onBack, onApply
                         </div>
                     )}
 
-                    {filteredSounds.length > 0 ? (
-                        filteredSounds.map((item, index) => (
-                            <div
-                                key={item.id}
-                                style={{
-                                    padding: '12px 16px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 14,
-                                    borderBottom: index < filteredSounds.length - 1 ? '1px solid #EFEAF8' : 'none'
+                    <div style={{ maxHeight: 220, overflowY: 'auto' }}>
+                        {filteredSounds.length > 0 ? (
+                            filteredSounds.map((item, index) => (
+                                <div
+                                    key={item.id}
+                                    style={{
+                                        padding: '12px 16px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 14,
+                                        borderBottom: index < filteredSounds.length - 1 ? '1px solid #EFEAF8' : 'none'
                                 }}
                             >
                                 <div
@@ -220,11 +207,11 @@ export const HistoryFilter: React.FC<FiltrosHistoricoProps> = ({ onBack, onApply
                                         flexShrink: 0
                                     }}
                                 >
-                                    {item.icon}
+                                    {getSoundIcon(item.name || item.title)}
                                 </div>
 
                                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                                    <strong style={{ fontSize: 14, color: '#2D2342', fontWeight: 600 }}>{item.title}</strong>
+                                    <strong style={{ fontSize: 14, color: '#2D2342', fontWeight: 600 }}>{item.title || item.name || 'Som detectado'}</strong>
                                     <span style={{ fontSize: 11, color: '#8E879E' }}>Confiança: {item.confidence}%</span>
                                 </div>
 
@@ -236,6 +223,7 @@ export const HistoryFilter: React.FC<FiltrosHistoricoProps> = ({ onBack, onApply
                             Nenhum som encontrado para este filtro.
                         </div>
                     )}
+                    </div>
                 </div>
 
                 <div>

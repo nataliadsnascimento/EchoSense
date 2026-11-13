@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Clock, Search, Bell, User, ChevronLeft } from 'lucide-react';
+import { Home, Clock, Search, Bell, User, ChevronLeft, Baby, AlertTriangle, DoorClosed, Dog, Volume2 } from 'lucide-react';
 import { ConfirmModal } from '../components/ConfirmModal';
 
 export interface AlertDetailItem {
@@ -20,6 +20,18 @@ interface AlertDetailsProps {
     audioLevel?: string;
 }
 
+function getSoundIcon(soundName?: string, size: number = 20) {
+    const name = String(soundName || '').toLowerCase();
+
+    if (name.includes('campainha')) return <Bell size={size} />;
+    if (name.includes('bebê') || name.includes('bebe') || name.includes('choro')) return <Baby size={size} />;
+    if (name.includes('incêndio') || name.includes('fogo') || name.includes('alarme')) return <AlertTriangle size={size} />;
+    if (name.includes('cão') || name.includes('cachorro') || name.includes('latido')) return <Dog size={size} />;
+    if (name.includes('porta') || name.includes('batida')) return <DoorClosed size={size} />;
+
+    return <Volume2 size={size} />;
+}
+
 export function AlertDetails({
                                  onBack,
                                  onNavigate,
@@ -30,15 +42,15 @@ export function AlertDetails({
                                      dateOrTime: '27/12/2026 10:23:45',
                                  },
                                  relatedAlerts = [
-                                     { id: 1, title: 'Choro de bebê', confidence: '97%', dateOrTime: '10:15:32', icon: '👶' },
-                                     { id: 2, title: 'Alarme', confidence: '96%', dateOrTime: '09:47:21', icon: '⚠️' },
-                                     { id: 3, title: 'Porta batendo', confidence: '93%', dateOrTime: '09:20:11', icon: '🚪' },
-                                     { id: 4, title: 'Cachorro latindo', confidence: '93%', dateOrTime: '09:56:03', icon: '🐶' },
+                                     { id: 1, title: 'Choro de bebê', confidence: '97%', dateOrTime: '10:15:32'},
+                                     { id: 2, title: 'Alarme', confidence: '96%', dateOrTime: '09:47:21'},
+                                     { id: 3, title: 'Porta batendo', confidence: '93%', dateOrTime: '09:20:11'},
+                                     { id: 4, title: 'Cachorro latindo', confidence: '93%', dateOrTime: '09:56:03'},
                                  ],
                                  duration = '3.2 segundos',
                                  audioLevel = 'Alto',
                              }: AlertDetailsProps) {
-    // 🟢 Estado para controlar a exibição da mensagem de aviso/confirmação
+
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const handleConfirmDelete = () => {
@@ -66,8 +78,8 @@ export function AlertDetails({
                 </div>
 
                 <div className="bg-white rounded-[24px] p-6 shadow-sm border border-purple-50 flex flex-col items-center justify-center mb-4">
-                    <div className="w-16 h-16 rounded-full bg-[#F1ECF9] flex items-center justify-center mb-3">
-                        <Bell size={28} className="text-[#5C3C92]" />
+                    <div className="w-16 h-16 rounded-full bg-[#F1ECF9] flex items-center justify-center mb-3 text-[#5C3C92]">
+                        {getSoundIcon(mainAlert.title, 28)}
                     </div>
                     <h2 className="text-xl font-bold text-gray-900 mb-0.5">{mainAlert.title}</h2>
                     <span className="text-xs text-gray-400 font-medium mb-1">
@@ -82,8 +94,8 @@ export function AlertDetails({
                     {relatedAlerts.map((item) => (
                         <div key={item.id || item.title} className="p-3.5 flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-2xl bg-[#F4EFFB] flex items-center justify-center text-lg">
-                                    {item.icon || '🔔'}
+                                <div className="w-10 h-10 rounded-2xl bg-[#F4EFFB] flex items-center justify-center text-[#5C3C92]">
+                                    {getSoundIcon(item.title, 20)}
                                 </div>
                                 <div>
                                     <h3 className="text-xs font-bold text-gray-800">{item.title}</h3>

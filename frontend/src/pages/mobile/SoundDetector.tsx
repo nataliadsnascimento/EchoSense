@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChevronLeft, Bell, Baby, AlertTriangle, DoorClosed, Dog, Home, Clock, Search, User } from 'lucide-react';
+import {getSoundIcon} from "../../components/getSoundIcon.tsx";
 
 interface SoundItem {
     id: string;
@@ -25,7 +26,7 @@ const detectedSounds: SoundItem[] = [
 ];
 
 export const SoundDetector: React.FC<DetectarSonsProps> = ({ onBack, onNavigate, soundsList = []}) => {
-    const listToRender = soundsList && soundsList.length > 0 ? soundsList : detectedSounds;
+    const listToRender = (soundsList || []).filter(item => item !== null && item !== undefined);
 
     return (
         <div className="onboarding-screen" style={{ display: 'flex', flexDirection: 'column', height: '100%', paddingBottom: 0 }}>
@@ -68,14 +69,15 @@ export const SoundDetector: React.FC<DetectarSonsProps> = ({ onBack, onNavigate,
                         boxShadow: '0 4px 14px rgba(76, 52, 138, 0.08)'
                     }}
                 >
-                    {listToRender.map((item, index) => (
+                    {listToRender.length > 0 ? (
+                        listToRender.map((item, index) => (
                         <div
-                            key={item.id}
+                            key={item.id || index}
                             className="event-card"
                             style={{
                                 borderRadius: 0,
                                 border: 'none',
-                                borderBottom: index < detectedSounds.length - 1 ? '1px solid var(--border)' : 'none',
+                                borderBottom: index < listToRender.length - 1 ? '1px solid var(--border)' : 'none',
                                 padding: '14px 16px',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -96,7 +98,7 @@ export const SoundDetector: React.FC<DetectarSonsProps> = ({ onBack, onNavigate,
                                     padding: 0
                                 }}
                             >
-                                {typeof item.icon === 'string' ? item.icon : (item.icon || '🔊')}
+                                {getSoundIcon(item.name || item.title)}
                             </div>
 
                             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -115,7 +117,13 @@ export const SoundDetector: React.FC<DetectarSonsProps> = ({ onBack, onNavigate,
                                 {item.time}
                             </span>
                         </div>
-                    ))}
+                        ))
+                    ) : (
+
+                        <div style={{ padding: '32px 16px', textAlign: 'center', color: 'var(--muted)', fontSize: 14 }}>
+                            Aguardando detecção de sons em tempo real...
+                        </div>
+                    )}
                 </div>
             </div>
 

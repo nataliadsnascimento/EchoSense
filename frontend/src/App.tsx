@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
+// === Importações do Desktop ===
+
+import { AlertaAutomatico } from './components/AlertaAutomatico';
 import { SplashScreenDesktop } from './pages/desktop/SplashScreenDesktop';
 import { OnboardingDesktop } from './pages/desktop/OnboardingDesktop';
 import { LoginDesktop } from './pages/desktop/LoginDesktop';
 import { SignupDesktop } from './pages/desktop/SignupDesktop';
 import { SelectEnvironmentDesktop } from './pages/desktop/SelectEnvironmentDesktop';
 import { CustomizeEnvironmentDesktop } from './pages/desktop/CustomizeEnvironmentDesktop';
-import { HomeDesktop } from './pages/desktop/HomeDesktop';
-import { AdvancedAnalysisDesktop } from './pages/desktop/AdvancedAnalysisDesktop';
-import { SoundDetectorDesktop } from './pages/desktop/SoundDetectorDesktop';
-import { AlertScreenDesktop } from './pages/desktop/AlertScreenDesktop';
 
+// === Importações do Mobile ===
 import { SplashScreen } from './pages/mobile/SplashScreen';
 import { Onboarding1 } from './pages/mobile/Onboarding1';
 import { Onboarding2 } from './pages/mobile/Onboarding2';
@@ -23,14 +23,22 @@ import { CustomizeEnvironment } from './pages/mobile/CustomizeEnvironment';
 import { Home } from './pages/mobile/Home';
 import { DetectedSounds } from './pages/mobile/DetectedSounds';
 import { AlertScreen } from './pages/mobile/AlertScreen';
-import { SoundDetector } from "./pages/mobile/SoundDetector";
-import { AlertHistory } from "./pages/mobile/AlertHistory";
-import { HistoryFilter } from "./pages/mobile/HistoryFilter";
-import { AlertDetails } from "./components/AlertDetails.tsx";
+import {SoundDetector} from "./pages/mobile/SoundDetector";
+import {AlertHistory} from "./pages/mobile/AlertHistory";
+import {HistoryFilter} from "./pages/mobile/HistoryFilter";
+import {AlertDetails} from "./components/AlertDetails";
+import {UserProfile} from "./pages/mobile/UserProfile";
+import {ChangePasswordScreen} from "./pages/mobile/ChangePasswordScreen";
+import {GeneralSettings} from "./pages/mobile/GeneralSettings";
+import {OfflineSync} from "./pages/mobile/OfflineSync";
+import {AboutApp} from "./pages/mobile/AboutApp";
+import {HelpSupport} from "./pages/mobile/HelpSupport";
 
+// === Componentes Globais / Modais ===
 import { Sidebar } from './components/Sidebar';
 import { ConfirmModal } from './components/ConfirmModal';
 
+// === Função Auxiliar para Ícones Dinâmicos ===
 function getSoundIcon(soundName: string) {
     const name = soundName.toLowerCase();
 
@@ -40,7 +48,17 @@ function getSoundIcon(soundName: string) {
     if (name.includes('cão') || name.includes('cachorro') || name.includes('latido')) return '🐕';
     if (name.includes('porta') || name.includes('batida')) return '🚪';
 
-    return '🔊';
+    return '🔊'; // Ícone padrão
+}
+
+export interface SoundEvent {
+    id: string;
+    name: string;
+    confidence: number | string;
+    time: string;
+    date?: string;
+    environment?: string;
+    isAlarm?: boolean;
 }
 
 export function App() {
@@ -52,11 +70,15 @@ export function App() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    //Estados do usuário
+    const [nomeUsuario, setNomeUsuario] = useState('');
+    const [emailUsuario, setEmailUsuario] = useState('');
+
     const [telaAtual, setTelaAtual] = useState('splash');
+    const [resultados, setResultados] = useState<SoundEvent[]>([]);
+    const [ativo, setAtivo] = useState(true);
 
-    const [userName, setUserName] = useState('Carlos Melo');
-    const [userEmail, setUserEmail] = useState('carlos.melo@upe.br');
-
+    // Estado para disparar o Alerta em Tempo Real
     const [alertaAtivo, setAlertaAtivo] = useState<{
         soundName: string;
         confidence: string;
@@ -64,10 +86,12 @@ export function App() {
         icon?: string;
     } | null>(null);
 
+    // Estados para o Menu Lateral e Modais no Mobile
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const [ambienteEscolhido, setAmbienteEscolhido] = useState('Casa');
+    // Estados para guardar a escolha do ambiente no desktop
+    const [ambienteEscolhido, setAmbienteEscolhido] = useState<string>('trabalho');
     const [nomeOutro, setNomeOutro] = useState('');
 
     useEffect(() => {
@@ -80,21 +104,31 @@ export function App() {
     }, [telaAtual, isMobile]);
 
     const handleNavigation = (tab: string) => {
-        if (tab === 'inicio' || tab === 'home') {
-            setAlertaAtivo(null);
-            setTelaAtual('home');
-        }
-        if (tab === 'detectar' || tab === 'detectar-sons') {
-            setAlertaAtivo(null);
-            setTelaAtual('detectar-sons');
-        }
-        if (tab === 'historico' || tab === 'historico-alertas') {
-            setAlertaAtivo(null);
-            setTelaAtual('historico-alertas');
-        }
+        if (tab == 'inicio' || tab == 'home') setTelaAtual('home');
+        if (tab === 'detectar' || tab === 'detectar-sons') setTelaAtual('detectar-sons');
+        if (tab === 'historico' || tab === 'historico-alertas') setTelaAtual('historico-alertas');
         if (tab === 'alertas' || tab === 'detected-sounds') {
-            setAlertaAtivo(null);
-            setTelaAtual('alertas');
+
+               if (resultados && resultados.length > 0) {
+                const ultimoSom = resultados[0];
+                setAlertaAtivo({
+                    soundName: ultimoSom.name || 'Som detectado',
+                    confidence: `${ultimoSom.confidence}%`,
+                    time: ultimoSom.time || '10:22:45',
+                    icon: getSoundIcon(ultimoSom.name || ''),
+                });
+            } else {
+                // Fallback seguro: padrão de exemplo
+                setAlertaAtivo({
+                    soundName: 'Campainha',
+                    confidence: '88%',
+                    time: '10:22:45',
+                    icon: '🔔',
+                });
+                // Depois remove o setAlertaAtivo e coloca setTelaAtual('detectar-sons');
+               }
+        } else if (tab === 'perfil') {
+            setTelaAtual('perfil');
         }
     };
 
@@ -102,92 +136,55 @@ export function App() {
         title: string;
         confidence: string;
         dateOrTime: string;
+        duration?: string;
+        audioLevel?: string;
     } | null>(null);
+
+    const [filtrosHistorico, setFiltrosHistorico] = useState({
+        periodo: '7dias',
+        diasCustom: 3,
+        categoria: 'Todos',
+    });
 
     const irParaLogin = () => setTelaAtual('login');
 
+    // === RENDERIZAÇÃO DO FLUXO DESKTOP ===
     const renderDesktop = () => {
-        if (alertaAtivo || telaAtual === 'alertas') {
-            const currentAlertData = alertaAtivo || {
-                soundName: 'Campainha',
-                confidence: '98%',
-                time: '10:22:45',
-                icon: '🔔',
-            };
-
+        if (alertaAtivo) {
             return (
-                <AlertScreenDesktop
-                    userName={userName}
-                    userEmail={userEmail}
-                    soundName={currentAlertData.soundName}
-                    confidence={currentAlertData.confidence}
-                    time={currentAlertData.time}
-                    icon={currentAlertData.icon}
-                    onDismiss={() => {
-                        setAlertaAtivo(null);
-                        setTelaAtual('home');
-                    }}
-                    onViewDetails={() => {
-                        setAlertaAtivo(null);
-                        setTelaAtual('historico-alertas');
-                    }}
-                    onNavigateToHome={() => {
-                        setAlertaAtivo(null);
-                        setTelaAtual('home');
-                    }}
-                    onNavigateToHistory={() => {
-                        setAlertaAtivo(null);
-                        setTelaAtual('historico-alertas');
-                    }}
-                    onNavigateToDetect={() => {
-                        setAlertaAtivo(null);
-                        setTelaAtual('detected-sounds');
-                    }}
-                    onNavigateToAlerts={() => {
-                        setAlertaAtivo(null);
-                        setTelaAtual('alertas');
-                    }}
-                    onLogout={() => {
-                        setAlertaAtivo(null);
-                        setTelaAtual('login');
-                    }}
-                />
+                <div className="w-full h-screen bg-gray-950 flex items-center justify-center">
+                    <div className="w-[412px] h-[780px] rounded-[32px] overflow-hidden shadow-2xl border-4 border-gray-800">
+                        <AlertScreen
+                            soundName={alertaAtivo.soundName}
+                            confidence={alertaAtivo.confidence}
+                            time={alertaAtivo.time}
+                            icon={alertaAtivo.icon}
+                            onDismiss={() => setAlertaAtivo(null)}
+                            onViewDetails={() => {
+                                setDetalhesAlertaSelecionado({
+                                    title: alertaAtivo.soundName,
+                                    confidence: alertaAtivo.confidence,
+                                    dateOrTime: alertaAtivo.time,
+                                });
+                                setAlertaAtivo(null);
+                                setTelaAtual('detected-sounds');
+                            }}
+                        />
+                    </div>
+                </div>
             );
         }
 
         if (telaAtual === 'splash') return <SplashScreenDesktop onNext={() => setTelaAtual('onboarding')} />;
         if (telaAtual === 'onboarding') return <OnboardingDesktop onFinish={() => setTelaAtual('login')} />;
-
-        if (telaAtual === 'login') {
-            return (
-                <LoginDesktop
-                    onLoginSuccess={(email?: string) => {
-                        if (email) setUserEmail(email);
-                        setTelaAtual('select-env');
-                    }}
-                    onGoToSignup={() => setTelaAtual('cadastro')}
-                />
-            );
-        }
-
-        if (telaAtual === 'cadastro') {
-            return (
-                <SignupDesktop
-                    onSignupSuccess={(name?: string, email?: string) => {
-                        if (name) setUserName(name);
-                        if (email) setUserEmail(email);
-                        setTelaAtual('select-env');
-                    }}
-                    onGoToLogin={() => setTelaAtual('login')}
-                />
-            );
-        }
+        if (telaAtual === 'login') return <LoginDesktop onLoginSuccess={() => setTelaAtual('select-env')} onGoToSignup={() => setTelaAtual('cadastro')} />;
+        if (telaAtual === 'cadastro') return <SignupDesktop onSignupSuccess={() => setTelaAtual('select-env')} onGoToLogin={() => setTelaAtual('login')} />;
 
         if (telaAtual === 'select-env') {
             return (
                 <SelectEnvironmentDesktop
                     onNext={(ambiente, outroTexto) => {
-                        setAmbienteEscolhido(outroTexto || ambiente);
+                        setAmbienteEscolhido(ambiente);
                         if (outroTexto) setNomeOutro(outroTexto);
                         setTelaAtual('customize-env');
                     }}
@@ -207,71 +204,61 @@ export function App() {
 
         if (telaAtual === 'home') {
             return (
-                <HomeDesktop
-                    userName={userName}
-                    userEmail={userEmail}
-                    currentEnvironment={ambienteEscolhido}
-                    onNavigate={handleNavigation}
-                    onNavigateToHistory={() => setTelaAtual('historico-alertas')}
-                    onNavigateToDetect={() => setTelaAtual('detected-sounds')}
-                    onNavigateToAdvancedAnalysis={() => setTelaAtual('analise-avancada')}
-                    onLogout={() => setTelaAtual('login')}
-                />
-            );
-        }
-
-        if (telaAtual === 'analise-avancada') {
-            return (
-                <AdvancedAnalysisDesktop
-                    userName={userName}
-                    userEmail={userEmail}
-                    currentEnvironment={ambienteEscolhido}
-                    onNavigate={handleNavigation}
-                    onNavigateToHome={() => setTelaAtual('home')}
-                    onNavigateToHistory={() => setTelaAtual('historico-alertas')}
-                    onNavigateToDetect={() => setTelaAtual('detected-sounds')}
-                    onLogout={() => setTelaAtual('login')}
-                />
-            );
-        }
-
-        if (telaAtual === 'detected-sounds' || telaAtual === 'detectar-sons') {
-            return (
-                <SoundDetectorDesktop
-                    userName={userName}
-                    userEmail={userEmail}
-                    currentEnvironment={ambienteEscolhido}
-                    onNavigate={handleNavigation}
-                    onNavigateToHome={() => setTelaAtual('home')}
-                    onNavigateToHistory={() => setTelaAtual('historico-alertas')}
-                    onNavigateToDetect={() => setTelaAtual('detected-sounds')}
-                    onLogout={() => setTelaAtual('login')}
-                />
-            );
-        }
-
-        if (telaAtual === 'historico-alertas') {
-            return (
                 <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-900 text-white gap-4">
-                    <h1 className="text-2xl font-bold">Histórico de Alertas (Desktop)</h1>
-                    <button
-                        onClick={() => setTelaAtual('home')}
-                        className="px-4 py-2 bg-purple-600 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
-                    >
-                        Voltar ao Início
-                    </button>
+                    <h1 className="text-2xl font-bold">Home (Desktop)</h1>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => setTelaAtual('detected-sounds')}
+                            className="px-4 py-2 bg-purple-600 rounded-lg font-semibold hover:bg-purple-700 transition"
+                        >
+                            Ver Sons Detectados
+                        </button>
+                        <button
+                            onClick={() => {
+                                const nomeSom = 'Choro de Bebê';
+                                setAlertaAtivo({
+                                    soundName: nomeSom,
+                                    confidence: '95%',
+                                    time: new Date().toLocaleTimeString(),
+                                    icon: getSoundIcon(nomeSom),
+                                });
+                            }}
+                            className="px-4 py-2 bg-red-600 rounded-lg font-semibold hover:bg-red-700 transition"
+                        >
+                            Simular Alerta
+                        </button>
+                    </div>
                 </div>
+            );
+        }
+
+        if (telaAtual === 'detected-sounds') {
+            return (
+                <DetectedSounds
+                    onBack={() => setTelaAtual('home')}
+                    onSelectAlert={(alerta: any) => {
+                        const nomeSom = alerta?.name || 'Alarme de Incêndio';
+                        setAlertaAtivo({
+                            soundName: nomeSom,
+                            confidence: alerta?.confidence || '95%',
+                            time: alerta?.time || '10:30',
+                            icon: getSoundIcon(nomeSom),
+                        });
+                    }}
+                />
             );
         }
 
         return null;
     };
 
+    // === RENDERIZAÇÃO DO FLUXO MOBILE ===
     const renderMobile = () => {
         return (
-            <main className="bg-gray-950 min-h-screen w-full flex items-center justify-center p-2">
+            <main className="bg-gray-950 min-h-screen w-full flex items-center justify-center">
                 <div className="w-full max-w-[412px] h-[780px] bg-[#F8F7FA] shadow-2xl overflow-hidden rounded-[32px] border-4 border-gray-800 flex flex-col relative">
 
+                    {/* Alerta em Overlay/Modal quando ativado */}
                     {alertaAtivo ? (
                         <AlertScreen
                             soundName={alertaAtivo.soundName}
@@ -284,6 +271,8 @@ export function App() {
                                     title: alertaAtivo.soundName,
                                     confidence: alertaAtivo.confidence,
                                     dateOrTime: alertaAtivo.time,
+                                    duration: (alertaAtivo as any)?.duration || '3.2 segundos',
+                                    audioLevel: (alertaAtivo as any)?.audioLevel || 'Alto',
                                 });
                                 setAlertaAtivo(null);
                                 setTelaAtual('detalhes-alerta');
@@ -307,17 +296,25 @@ export function App() {
 
                             {telaAtual === 'cadastro' && (
                                 <Signup
-                                    onSignupSuccess={() => setTelaAtual('select-env')}
+                                    onSignupSuccess={(nomeDigitado, emailDigitado) => {
+                                        setNomeUsuario(nomeDigitado);
+                                        setEmailUsuario(emailDigitado);
+                                        setTelaAtual('select-env');
+                                    }}
                                     onGoToLogin={irParaLogin}
                                 />
                             )}
 
                             {telaAtual === 'select-env' && (
                                 <SelectEnvironment
-                                    onNext={() => setTelaAtual('customize-env')}
+                                    onNext={(ambiente: string) => {
+                                        if (ambiente) setAmbienteEscolhido(ambiente);
+                                        setTelaAtual('customize-env');
+                                    }}
                                 />
                             )}
 
+                            {/* Rota para os Detalhes do Alerta */}
                             {telaAtual === 'detalhes-alerta' && (
                                 <AlertDetails
                                     onBack={() => setTelaAtual('historico-alertas')}
@@ -326,61 +323,83 @@ export function App() {
                                         setTelaAtual('historico-alertas');
                                     }}
                                     mainAlert={detalhesAlertaSelecionado || {
-                                        title: 'Campainha',
-                                        confidence: '98%',
-                                        dateOrTime: '27/12/2026 10:23:45',
+                                        title: 'Som detectado',
+                                        confidence: '0%',
+                                        dateOrTime: '--:--',
                                     }}
+                                    duration={detalhesAlertaSelecionado?.duration || '3.2 segundos'}
+                                    audioLevel={detalhesAlertaSelecionado?.audioLevel || 'Alto'}
                                 />
                             )}
 
-                            {telaAtual === 'customize-env' && (
-                                <CustomizeEnvironment
-                                    onFinish={() => setTelaAtual('home')}
-                                />
-                            )}
+                {telaAtual === 'customize-env' && (
+                    <CustomizeEnvironment
+                        onFinish={() => setTelaAtual('home')}
+                    />
+                )}
 
-                            {telaAtual === 'detectar-sons' && (
-                                <SoundDetector
-                                    onBack={() => setTelaAtual('home')}
-                                    onNavigate={handleNavigation}
-                                />
-                            )}
+                {telaAtual === 'detectar-sons' && (
+                    <SoundDetector
+                        onBack={() => setTelaAtual('home')}
+                        onNavigate={handleNavigation}
+                        soundsList={resultados}
+                        ambienteAtual={ambienteEscolhido}
+                    />
+                )}
 
-                            {telaAtual === 'historico-alertas' && (
-                                <AlertHistory
-                                    onBack={() => setTelaAtual('home')}
-                                    onOpenFilter={() => setTelaAtual('filtros-historico')}
-                                    onNavigate={handleNavigation}
-                                    onSelectAlert={(alerta?: any) => {
-                                        const nomeSom = alerta?.name || alerta?.title || 'Campainha';
-                                        const conf = alerta?.confidence || '98%';
-                                        const hora = alerta?.time || alerta?.dateOrTime || '10:23:45';
+                {telaAtual === 'historico-alertas' && (
+                    <AlertHistory
+                        onBack={() => setTelaAtual('home')}
+                        onOpenFilter={() => setTelaAtual('filtros-historico')}
+                        onNavigate={handleNavigation}
+                        soundsList={resultados}
+                        ambienteAtual={ambienteEscolhido}
+                        onSelectAlert={(alerta?: any) => {
+                                const nomeSom = alerta?.name || alerta?.title || 'Campainha';
+                                const conf = alerta?.confidence || '98%';
+                                const hora = alerta?.time || alerta?.dateOrTime || '10:23:45';
 
-                                        setDetalhesAlertaSelecionado({
-                                            title: nomeSom,
-                                            confidence: conf,
-                                            dateOrTime: hora,
-                                        });
-                                        setTelaAtual('detalhes-alerta');
-                                    }}
-                                />
-                            )}
+                                setDetalhesAlertaSelecionado({
+                                    title: nomeSom,
+                                    confidence: conf,
+                                    dateOrTime: hora,
+                                });
+                                setTelaAtual('detalhes-alerta');
+                        }}
+                    />
+                )}
 
-                            {telaAtual === 'filtros-historico' && (
-                                <HistoryFilter
-                                    onBack={() => setTelaAtual('historico-alertas')}
-                                />
-                            )}
+                {telaAtual === 'filtros-historico' && (
+                    <HistoryFilter
+                        onBack={() => setTelaAtual('historico-alertas')}
+                        soundsList={resultados}
+                        ambienteAtual={ambienteEscolhido}
+                        onApply={(filtros) => {
+                            setFiltrosHistorico({
+                                periodo: filtros.periodo,
+                                diasCustom: filtros.diasCustom || 3,
+                                categoria: filtros.categoria,
+                            });
+                            if (filtros.ambiente && filtros.ambiente !== 'Todos') {
+                                setAmbienteEscolhido(filtros.ambiente);
+                            }
+                        }}
+                    />
+                )}
 
+                            {/* Tela Principal (Home) */}
                             {telaAtual === 'home' && (
                                 <Home
-                                    userName={userName}
+                                    userName="Natália"
+                                    ambienteAtual={ambienteEscolhido}
+                                    onSelectEnvironment={(novoAmbiente) => setAmbienteEscolhido(novoAmbiente)}
                                     onOpenSidebar={() => setIsSidebarOpen(true)}
-                                    onNavigateToDetect={() => setTelaAtual('detected-sounds')}
+                                    onNavigateToDetect={() => setTelaAtual('detectar-sons')}
                                     onNavigateToHistory={() => setTelaAtual('historico-alertas')}
                                 />
                             )}
 
+                            {/* Tela de Sons Detectados */}
                             {telaAtual === 'detected-sounds' && (
                                 <DetectedSounds
                                     onBack={() => setTelaAtual('home')}
@@ -396,19 +415,86 @@ export function App() {
                                 />
                             )}
 
+                            {telaAtual === 'perfil' && (
+                                <UserProfile
+                                    userName={nomeUsuario}
+                                    userEmail={emailUsuario}
+                                    onNavigate={handleNavigation}
+                                    onLogout={() => setTelaAtual('login')}
+                                    onOpenLogoutModal={() => setIsModalOpen(true)}
+                                    onOpenChangePassword={() => setTelaAtual('alterar-senha')}
+                                    onOpenSettings={() => setTelaAtual('configuracoes-gerais')}
+                                />
+                            )}
+
+                            {telaAtual == 'alterar-senha' && (
+                                <ChangePasswordScreen
+                                    onBack={() => setTelaAtual('perfil')}
+                                    onSuccess={() => setTelaAtual('perfil')}
+                                />
+                            )}
+
+                            {telaAtual === 'configuracoes-gerais' && (
+                                <GeneralSettings
+                                    onBack={() => setTelaAtual('perfil')}
+                                    onNavigate={handleNavigation}
+                                />
+                            )}
+
+                            {telaAtual === 'sincronizacao' && (
+                                <OfflineSync
+                                    onBack={() => setTelaAtual('perfil')}
+                                    onNavigate={handleNavigation}
+                                    eventosPendentes={resultados.map(som => ({
+                                        id: som.id,
+                                        name: som.name,
+                                        time: som.time,
+                                        date: som.date || 'Hoje',
+                                        icon: getSoundIcon(som.name)
+                                    }))}
+                                    isOffline={true}
+                                    onSyncNow={() => {
+                                        alert('Sincronizando com o servidor...');
+                                    }}
+                                />
+                            )}
+
+                            {/*Alterar na integração*/}
+                            {telaAtual === 'sobre-app' && (
+                                <AboutApp
+                                    onBack={() => setTelaAtual('perfil')}
+                                    onNavigate={handleNavigation}
+                                />
+                            )}
+
+                            {/*Alterar na integração*/}
+                            {telaAtual === 'ajuda-suporte' && (
+                                <HelpSupport
+                                    onBack={() => setTelaAtual('perfil')}
+                                    onNavigate={handleNavigation}
+                                    onOpenChat={() => alert('Abrindo chat de suporte...')}
+                                />
+                            )}
+
+                            {/* Menu Lateral (Sidebar) */}
                             <Sidebar
                                 isOpen={isSidebarOpen}
                                 onClose={() => setIsSidebarOpen(false)}
                                 onNavigate={(page) => {
                                     handleNavigation(page);
                                 }}
+                                onOpenSettings={() => {
+                                    setIsSidebarOpen(false);
+                                    setTelaAtual('configuracoes-gerais');
+                                }}
                                 onOpenLogoutModal={() => {
                                     setIsSidebarOpen(false);
                                     setIsModalOpen(true);
                                 }}
-                                userName={userName}
+                                userName="Natália"
                             />
 
+                            {/* Modal de Confirmação de Saída */}
                             <ConfirmModal
                                 isOpen={isModalOpen}
                                 title="Tem certeza que deseja sair?"
@@ -426,7 +512,43 @@ export function App() {
         );
     };
 
-    return isMobile ? renderMobile() : renderDesktop();
+
+return (
+    <>
+        {isMobile ? renderMobile() : renderDesktop()}
+
+        <AlertaAutomatico
+            ativo={ativo}
+            resultados={resultados}
+            mostrarControles={
+                telaAtual === 'home' ||
+                telaAtual === 'detected-sounds' ||
+                telaAtual === 'detectar-sons'
+            }
+
+            onDetection={(novoSom: SoundEvent) => {
+                const somComAmbiente = {
+                    ...novoSom,
+                    environment: ambienteEscolhido || 'Trabalho',
+                };
+
+                setResultados((prev) => [somComAmbiente, ...prev]);
+
+                if (Number(novoSom.confidence) >= 85) {
+                    setAlertaAtivo({
+                        soundName: novoSom.name,
+                        confidence: `${novoSom.confidence}%`,
+                        time: novoSom.time || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                        icon: getSoundIcon(novoSom.name),
+                        duration: (novoSom as any).duration ? `${(novoSom as any).duration}s` : '3.2 segundos',
+                        audioLevel: Number(novoSom.confidence) > 90 ? 'Muito Alto' : 'Alto',
+                    } as any);
+                }
+            }}
+        />
+    </>
+);
+
 }
 
 export default App;
