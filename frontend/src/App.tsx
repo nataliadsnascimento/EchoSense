@@ -30,7 +30,8 @@ import {AlertDetails} from "./components/AlertDetails";
 import {UserProfile} from "./pages/mobile/UserProfile";
 import {ChangePasswordScreen} from "./pages/mobile/ChangePasswordScreen";
 import {GeneralSettings} from "./pages/mobile/GeneralSettings";
-import {OfflineSync} from "./pages/mobile/OfflineSync.tsx";
+import {OfflineSync} from "./pages/mobile/OfflineSync";
+import {AboutApp} from "./pages/mobile/AboutApp";
 
 // === Componentes Globais / Modais ===
 import { Sidebar } from './components/Sidebar';
@@ -454,6 +455,14 @@ export function App() {
                                     onSyncNow={() => {
                                         alert('Sincronizando com o servidor...');
                                     }}
+                                />
+                            )}
+
+                            //Alterar na integração
+                            {telaAtual === 'sobre-app' && (
+                                <AboutApp
+                                    onBack={() => setTelaAtual('perfil')}
+                                    onNavigate={handleNavigation}
                                 />
                             )}
 
